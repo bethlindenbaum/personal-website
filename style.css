@@ -1,0 +1,46 @@
+body {
+    background-color: DarkOliveGreen;
+  }
+  
+h1 {
+    font-family: oswald;
+    font-size: 32px;
+    font-weight: 500;
+    text-transform: uppercase;
+    line-height: 1;
+        font-weight: bold;
+    color: Ivory;
+    /* background-color: linen; */
+}
+
+hr{
+    color: Ivory;
+}
+
+p {
+    font-family: Inter;
+    letter-spacing: 0.3px;
+    font-size: 16px;
+    line-height: 20px;
+    color: Ivory;
+}
+
+div {
+    font-family: Inter;
+    letter-spacing: 0.3px;
+    font-size: 16px;
+    line-height: 18px;
+    padding: 3px 3px 3px 3px;
+    border-radius: 3px;
+    color: DarkOliveGreen;
+    background-color: Ivory;
+}
+
+button{
+    color: DarkOliveGreen;
+    /* background-color: Ivory; */
+}
+
+footer{
+    color: Ivory;
+}
