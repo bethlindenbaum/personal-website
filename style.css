@@ -1,5 +1,9 @@
 body {
     background-color: DarkOliveGreen;
+    margin: 10;
+    padding: 10;
+    text-align: left;
+    float: none;
   }
   
 h1 {
@@ -8,7 +12,18 @@ h1 {
     font-weight: 500;
     text-transform: uppercase;
     line-height: 1;
-        font-weight: bold;
+    font-weight: bold;
+    color: Ivory;
+    /* background-color: linen; */
+}
+
+h2 {
+    font-family: oswald;
+    font-size: 24px;
+    /* font-weight: 500; */
+    /* text-transform: uppercase; */
+    /* line-height: 1; */
+    font-weight: bold;
     color: Ivory;
     /* background-color: linen; */
 }
@@ -38,7 +53,6 @@ div {
 
 button{
     color: DarkOliveGreen;
-    /* background-color: Ivory; */
 }
 
 footer{
