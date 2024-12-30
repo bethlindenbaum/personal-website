@@ -1,46 +1,351 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: "Gill Sans", sans-serif;
+    box-sizing: border-box;
+}
+
+html{
+    scroll-behavior: smooth;
+}
+
 body {
-    background-color: DarkOliveGreen;
+    background: #171b40;
+    color: white;
     margin: 10;
     padding: 10;
     text-align: left;
     float: none;
-  }
+}
+
+#header{
+    width: 100%;
+    height: 100vh;
+    background-image: url(images/background-picture.png);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.container{
+    padding: 10px 10%;
+}
+
+nav{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+nav ul li{
+    display: inline-block;
+    list-style: none;
+    margin: 15px 20px;
+}
+
+nav ul li a{
+    color: white;
+    text-decoration: none;
+    font-size: 20px;
+    position: relative;
+}
+
+nav ul li a::after{
+    content: '';
+    width: 0;
+    height: 3px;
+    background: #87CEEB;
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    transition: 0.5s;
+}
+
+nav ul li a:hover::after{
+    width: 100%;
+}
+
+.header-text{
+    margin-top: 20%;
+    font-size: 30px;
+    color: white;
+    /* line-height: 1; */
+}
+
+.header-text h1{
+    font-weight: bold;
+    font-size: 60px;
+    margin-top: 20px;
+}
+
+.header-text h1 span{
+    color: #87CEEB;   
+}
+
+/* -----------about-------------- */
+#about{
+    padding: 80px 0;
+    color: #d2cfcf;
+}
+
+.row{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.about-col-1{
+    flex-basis: 35%;
+}
+
+.about-col-1 img{
+    width: 100%;
+    border-radius: 15px;
+}
+
+.about-col-2{
+    flex-basis: 60%;
+    font-size: 16px;
+}
+
+.subtitle{
+    font-size: 60px;
+    font-weight: 600;
+    color: white
+}
+
+/* ----------projects----------- */
+#projects{
+    padding: 30px 0;
+}
+
+.projects-list{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-gap: 40px;
+    margin-top: 50px;
+}
+
+.projects-list div{
+    padding: 40px;
+    background: #0F52BA;
+    /* padding: 40px; */
+    font-size: 13px;
+    font-weight: 300;
+    border-radius: 10px;
+    transition: background 0.5s, transform 0.5s;
+}
+
+.projects-list div img{
+    border-radius: 10px;
+    font-size: 50px;
+    margin-bottom: 30px;
+    width: 100%;
+    height: width*.4;
+}
+
+.projects-list div h2{
+    font-size: 30px;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.projects-list div p{
+    font-size: 16px;
+}
+
+.projects-list div a{
+    text-decoration: none;
+    color: white;
+    font-size: 12 px;
+    margin-top: 20px;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.projects-list div:hover{
+    background: #87CEEB;
+    transform: translateY(-10px);
+}
+
+/* ------------links------------ */
+#links{
+    padding: 50px 0;
+}
+
+.links-list{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-gap: 40px;
+    margin-top: 50px;
+    place-items: center;
+}
+
+/* .links-list a{
+    width: 50%; 
+    margin-left: auto;
+    margin-right: auto;
+} */
+
+.links-list a i{
+    font-size: 70px;
+    color: white;
+    transition: color 0.5s;
+}
+
+.links-list a p{
+    color: white;
+    margin-top: 10px;
+    text-decoration: none;
+    text-align: center;
+    font-size: 18px;
+}
+
+.links-list a{
+    text-decoration: none;
+}
+
+.links-list a i:hover{
+    color: #87CEEB;
+}
   
-h1 {
-    font-family: oswald;
+.links{
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.work img{
+    width: 100%;
+    border-radius: 10px;
+    display: block;
+}
+
+.btn{
+    display: block;
+    margin: 50px auto;
+    width: fit-content;
+    border: 1px solid #0F52BA;
+    padding: 14px 50px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: white;
+    transition: background 0.5s;
+}
+
+.btn:hover{
+    background: #0F52BA;
+
+}
+
+/* ------------css for small screen--------------- */
+
+nav .fa-solid{
+    display: none;
+}
+
+@media only screen and (max-width: 600px){
+    #header{
+        background-image: url(images/phone-background.png);
+    }
+
+    .header-text{
+        margin-top: 100%;
+        font-size: 16px;
+    }
+
+    .header-text h1{
+        font-size: 30px;
+    }
+
+    nav .fa-solid{
+        display: block;
+        font-size: 25px;
+    }
+
+    nav{
+        position: absolute;
+        right: 30px;
+        top: 20px
+    }
+
+    nav ul{
+        background: #0F52BA;
+        position: fixed;
+        top: 0;
+        right: -200px;
+        width: 200px;
+        height: 100vh;
+        padding-top: 50px;
+        z-index: 2;
+        transition: right 0.5s;
+    }
+
+    nav ul li{
+        display: block;
+        margin: 25px;
+    }
+
+    nav ul .fa-solid{
+        position: absolute;
+        top: 25px;
+        left: 25px;
+        cursor: pointer;
+    }
+
+    .subtitle{
+        font-size: 40px;
+    }
+
+    .about-col-1, .about-col-2{
+        flex-basis: 100%;
+    }
+
+    .about-col-1{
+        margin-bottom: 30px;
+    }
+    
+    .about-col-2{
+        font-size: 16px;
+    }
+}
+
+
+/* h1 {
+    font-family: "Gill Sans", sans-serif;
     font-size: 32px;
+    text-transform: uppercase;
+    line-height: 1;
+    font-weight: bold;
+    color: Ivory;
+    background-color: linen;
+} */
+
+/* h2 {
+    font-family: oswald;
+    font-size: 24px;
     font-weight: 500;
     text-transform: uppercase;
     line-height: 1;
     font-weight: bold;
     color: Ivory;
-    /* background-color: linen; */
-}
-
-h2 {
-    font-family: oswald;
-    font-size: 24px;
-    /* font-weight: 500; */
-    /* text-transform: uppercase; */
-    /* line-height: 1; */
-    font-weight: bold;
-    color: Ivory;
-    /* background-color: linen; */
-}
-
+    background-color: linen;
+} */
+/* 
 hr{
     color: Ivory;
-}
+} */
 
-p {
+/* p {
     font-family: Inter;
     letter-spacing: 0.3px;
     font-size: 16px;
     line-height: 20px;
     color: Ivory;
-}
+} */
 
-div {
+/* div {
     font-family: Inter;
     letter-spacing: 0.3px;
     font-size: 16px;
@@ -49,12 +354,12 @@ div {
     border-radius: 3px;
     color: DarkOliveGreen;
     background-color: Ivory;
-}
+} */
 
-button{
+/* button{
     color: DarkOliveGreen;
 }
 
 footer{
     color: Ivory;
-}
+} */

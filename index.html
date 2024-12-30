@@ -2,44 +2,126 @@
 <html>
 
   <head>
-    <title>Beth's Personal Page</title>
+    <title>Beth's Personal Portfolio Website</title>
     <link rel="stylesheet" href="style.css">
-    <script src="dynamics.js"></script>
+    <script src="script.js"></script>
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <script src="https://kit.fontawesome.com/4306451910.js" crossorigin="anonymous"></script>
   </head>
 
   <body>
-    <h1>
-      Welcome to Beth's home page
-    </h1>
-    <hr>
-    <h2>
-      About Me
-    </h2>
-    <img src="Grad pic.JPG" alt="Personal Picture" width="315" height="393" id="personalPicture"/>
-    <p>
-      I am a student at Duke University, double majoring in Electrical and Computer Engineering, and Computer Science.  I enjoy working with software and hardware, and am interested in gaining experience in electronics and computers.<br><br>
+    <div id="header">
+      <div class="container">
+        <nav>
+          <ul id="sidemenu">
+            <li><a href="#header">Home</a></li>
+            <li><a href="#about">About Me</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#links">Links</a></li>
+            <i class="fa-solid fa-xmark" onclick="closemenu()"></i>
+          </ul>
+          <i class="fa-solid fa-bars" onclick="openmenu()"></i>
+        </nav>
+        <div class="header-text">
+          <!-- <p>Aspiring Copmuter Engineer</p> -->
+          <h1>Hi, I'm <span>Beth</span><br>Lindenbaum</h1>
+        </div>
+      </div>
+    </div>
 
-      Throughout my time at Duke, I have been working on a project with a team of classmates, developing an Audio-visual Alert system for drone delivery.  We utilized technical concepts such as Arduino, circuit design, and power efficiency to develop our prototype.  Last Spring, our client invited us to present our device at a health conference in Seattle, and we are in the process of obtaining patent protection.  I have also worked on other coding projects, such as a cache simulator, a file compression/decompression program, a calculator app for iPhone, and a machine learning project meant to recommend songs on Spotify using a personalized algorithm.<br><br>
+    <!-- ------------about------------- -->
 
-      Outside the classroom, I am very involved on Duke's campus.  I am on the executive board of Women's Club Basketball and Jewish Student Union at Duke.  I am also involved in the Society of Women Engineers and Duke Technology Scholars (DTech).  Finally, during the Spring 2025 semester, I will be a teaching assistant for Duke's Computer Architecture (COMPSCI 250) course.<br><br>
+    <div id="about">
+      <div class="container">
+        <div class="row">
+          <div class="about-col-1">
+            <img src="images/Seattle-pic.png" id="image1">
+          </div>
+          <div class="about-col-2">
+            <h1 class="subtitle">About Me</h1>
+            <p>
+              I am a student at Duke University, double majoring in Electrical and Computer Engineering, and Computer Science.  I enjoy working with software and hardware, and am interested in gaining experience in electronics and computers.<br><br>
 
-      More information about my projects, experience, and qualifications can be found on my resume.
-    </p>
-    <hr>
-    <h2>
-      Links
-    <h2>
-    <div>
-      <a href="https://github.com/bethlindenbaum" target="_blank">Github</a>
-      <br>
-      <a href="https://www.linkedin.com/in/beth-lindenbaum-a52447303" target="_blank">Linkedin</a>
-      <br>
-      <a href="https://acrobat.adobe.com/id/urn:aaid:sc:VA6C2:58db41ee-92e1-400b-906d-e385c72ca9a9" target="_blank">Resume</a>
-    <div>
-    <button onclick="showtime()">
-      Show Time
-    </button>
-    <hr>
+              Throughout my time at Duke, I have been working on a project with a team of classmates, developing an Audio-visual Alert system for drone delivery.  We utilized technical concepts such as Arduino, circuit design, and power efficiency to develop our prototype.  Last Spring, our client invited us to present our device at a health conference in Seattle, and we are in the process of obtaining patent protection.  I have also worked on other coding projects, such as a cache simulator, a file compression/decompression program, a calculator app for iPhone, and a machine learning project meant to recommend songs on Spotify using a personalized algorithm.<br><br>
+
+              Outside the classroom, I am very involved on Duke's campus.  I am on the executive board of Women's Club Basketball and Jewish Student Union at Duke.  I am also involved in the Society of Women Engineers and Duke Technology Scholars (DTech).  Finally, during the Spring 2025 semester, I will be a teaching assistant for Duke's Computer Architecture (COMPSCI 250) course.<br><br>
+
+              More information about my projects, experience, and qualifications can be found on my resume, Github, and Linkedin.
+              <!-- I am a student at Duke University, double majoring in Electrical and Computer Engineering, and Computer Science.  I enjoy working with software and hardware, and am interested in gaining experience in electronics and computers.<br><br>
+
+              My project experience includes an Audio-visual Alert System for drone delivery, a cache simulator, a file compressor/decompressor, a calculator app for iPhone, and a machine learning project meant to recommend songs on Spotify using a personalized algorithm.<br><br>
+
+              Outside the classroom, I am very involved on Duke's campus.  I am on the executive board of Women's Club Basketball and Jewish Student Union at Duke.  I am also involved in the Society of Women Engineers and Duke Technology Scholars (DTech).  Finally, during the Spring 2025 semester, I will be a teaching assistant for Duke's Computer Architecture (COMPSCI 250) course.<br><br>
+
+              Learn more about my projects, experience, and qualifications below. -->
+            </p>
+
+            <!-- <div class="tab-titles">
+              <p class="tab-links">Skills</p>
+              <p class="tab-links">Projects</p>
+              <p class="tab-links">Projects</p>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ------------Projects------------- -->
+
+    <div id="projects">
+      <div class="container">
+        <h1 class="subtitle">Featured Projects</h1>
+        <div class="projects-list">
+          <div>
+            <img src="images/AED-icon.png">
+            <h2>Audio-Visual Alert System for Drone Delivery</h2>
+            <p>A device to aid bystanders in locating drone-delivered items via audio and visual alerts.</p>
+            <a href="coming-soon.html">Learn more</a>
+          </div>
+          <div>
+            <img src="images/calc-icon.png">
+            <h2>Calculator App</h2>
+            <p>The Calculator App is an iOS app that can be used to perform numerical computations using your mobile device.</p>
+            <a href="https://github.com/bethlindenbaum/calculator-app.git">Learn more</a>
+          </div>
+          <div>
+            <img src="images/cpu-icon.png">
+            <h2>16-bit MIPS CPU</h2>
+            <p>A CPU built with a 16-bit MIPS-based ISA using Logisim.</p>
+            <a href="coming-soon.html">Learn more</a>
+          </div>
+        </div>
+        <a href="coming-soon.html" class="btn">See more</a>
+      </div>
+    </div>
+
+    <!-- ----------------links---------------- -->
+
+    <div id="links">
+      <div class="container">
+        <h1 class="subtitle">Links</h1>
+        <div class="links-list">
+          
+          <a href="https://github.com/bethlindenbaum" target="_blank"><i class="fa-brands fa-github"></i><p>Github</p></a>
+          
+          <a href="https://www.linkedin.com/in/beth-lindenbaum-a52447303" target="_blank"><i class="fa-brands fa-linkedin"></i><p>Linkedin</p></a>
+          
+          <a href="files/Beth_Lindenbaum_Resume-copy.pdf" target="_blank" download="files/Beth_Lindenbaum_Resume-copy.pdf"><i class="fa-regular fa-file"></i><p>Resume</p></a>
+        </div>
+      </div>
+    </div>
   </body>
 
 </html>
+
+<script>
+  var sidemenu = document.getElementById("sidemenu");
+
+  function openmenu(){
+      sidemenu.style.right = "0"
+  }
+
+  function closemenu(){
+      sidemenu.style.right = "-200px"
+  }
+</script>
