@@ -12,8 +12,8 @@ html{
 body {
     background: #171b40;
     color: white;
-    margin: 10;
-    padding: 10;
+    /* margin: 10;
+    padding: 10; */
     text-align: left;
     float: none;
 }
@@ -169,6 +169,22 @@ nav ul li a:hover::after{
     transform: translateY(-10px);
 }
 
+.btn{
+    display: block;
+    margin: 50px auto;
+    width: fit-content;
+    border: 1px solid #0F52BA;
+    padding: 14px 50px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: white;
+    transition: background 0.5s;
+}
+
+.btn:hover{
+    background: #0F52BA;
+}
+
 /* ------------links------------ */
 #links{
     padding: 50px 0;
@@ -214,29 +230,6 @@ nav ul li a:hover::after{
     border-radius: 10px;
     position: relative;
     overflow: hidden;
-}
-
-.work img{
-    width: 100%;
-    border-radius: 10px;
-    display: block;
-}
-
-.btn{
-    display: block;
-    margin: 50px auto;
-    width: fit-content;
-    border: 1px solid #0F52BA;
-    padding: 14px 50px;
-    border-radius: 6px;
-    text-decoration: none;
-    color: white;
-    transition: background 0.5s;
-}
-
-.btn:hover{
-    background: #0F52BA;
-
 }
 
 /* ------------css for small screen--------------- */
