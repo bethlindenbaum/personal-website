@@ -1,0 +1,256 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Calculator App - Beth's Personal Portfolio Website</title>
+    <link rel="stylesheet" href="calculator-app.css">
+    
+    <!-- Prism.js Default Theme -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    
+    <!-- Prism.js Line Numbers Plugin CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet">    
+    
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <script src="https://kit.fontawesome.com/4306451910.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <h1 class="title">Calculator App</h1>
+
+    <p>
+        The Calculator App is an iOS app used to perform numerical computation on a mobile device.  The Calculator App was coded using Swift anf SwiftUI.  The Calculator App has digits 0-9, and can perform addition, subtraction, multiplication, and division.  It can also change the sign of the number it is currently showing, and change the number currently showing to a percentage (multiplies the number shown by 0.01).  You can clear the current calculation by pressing the AC button, and you can get the result of the current calculation by pressing the equals sign.  Source code for the Calculator App is shown below, and can also be found on <a href="https://github.com/bethlindenbaum/calculator-app.git" target="_blank">this Github repository</a>.
+    </p>
+
+    <h2 class="subtitle"></h2class>Source Code</h2>
+
+    <div id="box">
+        <pre class="line-numbers" data-start="1">
+            <code class="language-swift">//  ContentView.swift
+//  Calculator
+//
+//  Created by Beth Lindenbaum on 12/27/24.
+//
+
+import SwiftUI
+
+let lightPink = Color(red: 255/255, green: 182/255, blue: 193/255)
+let blushPink = Color(red: 254/255, green: 130/255, blue: 140/255)
+let darkPink = Color(red: 170/255, green: 51/255, blue: 106/255)
+let darkLavender = Color(red: 115/255, green: 79/255, blue: 150/255)
+let periwinkle = Color(red: 167/255, green: 199/255, blue: 231/255)
+let saphireBlue = Color(red: 65/255, green: 105/255, blue: 225/255)
+let royalBlue = Color(red: 150/255, green: 222/255, blue: 209/255)
+let pink = Color(red: 255/255, green: 192/255, blue: 203/255)
+let mauve = Color(red: 135/255, green: 76/255, blue: 98/255)
+let customMauve = Color(red: 145/255, green: 76/255, blue: 108/255)
+let pastelPink = Color(red: 255/255, green: 209/255, blue: 220/255)
+let fuchsia = Color(red: 100/255, green: 0/255, blue: 100/255)
+let hotPink = Color(red: 255/255, green: 105/255, blue: 180/255)
+let dustyRose = Color(red: 201/255, green: 135/255, blue: 135/255)
+let rose = Color(red: 255/255, green: 0/255, blue: 127/255)
+let pink2 = Color(red: 231/255, green: 84/255, blue: 128/255)
+let flamingo = Color(red: 252/255, green: 142/255, blue: 172/255)
+let mauvelous = Color(red: 239/255, green: 152/255, blue: 170/255)
+let schaussPink = Color(red: 255/255, green: 145/255, blue: 175/255)
+let darkBlue = Color(red: 0.2, green: 0.3, blue: 0.5)
+let veryDarkBlue = Color(red: 0, green: 0, blue: 90/255)
+let pinkishRed = Color(red: 0.8, green: 0.2, blue: 0.4)
+let spaceCadet = Color(red: 21/255, green: 40/255, blue: 82/255)
+let maastrichtBlue = Color(red: 8/255, green: 24/255, blue: 58/255)
+let jazzberryJam = Color(red: 156/255, green: 15/255, blue: 95/255)
+let backgroundGradient = LinearGradient(
+    colors: [Color.red, Color.blue],
+    startPoint: .top, endPoint: .bottom)
+let circleGradient = AngularGradient(colors: [.blue, .purple, .pink, .red, .pink, .purple, .blue], center: .center)
+
+enum CalcButton: String{
+    case one = "1"
+    case two = "2"
+    case three = "3"
+    case four = "4"
+    case five = "5"
+    case six = "6"
+    case seven = "7"
+    case eight = "8"
+    case nine = "9"
+    case zero = "0"
+    case add = "+"
+    case subtract = "-"
+    case multiply = "x"
+    case divide = "/"
+    case equal = "="
+    case clear = "AC"
+    case decimal = "."
+    case percent = "%"
+    case negative = "+/-"
+    
+    var buttonColor: Color{
+        switch self{
+        case .add, .subtract, .multiply, .divide, .equal:
+            return jazzberryJam
+        case .clear, .negative, .percent:
+            return darkBlue
+        default:
+            return maastrichtBlue
+        }
+    }
+}
+
+enum Operation {
+    case add, subtract, multiply, divide, none
+}
+
+struct ContentView: View {
+    
+    @State var strValue = "0"
+    @State var numValue = 0
+    @State var runningNumber: Double = 0
+    @State var currentOperation: Operation = .none
+    @State var decimalTapped = false
+    @State var negativetapped = false
+    
+    let buttons: [[CalcButton]] = [
+        [.clear, .negative, .percent, .divide],
+        [.seven, .eight, .nine, .multiply],
+        [.four, .five, .six, .subtract],
+        [.one, .two, .three, .add],
+        [.zero, .decimal, .equal],
+    
+    ]
+    
+    var body: some View {
+        ZStack
+        {
+            backgroundGradient.edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
+            
+            VStack {
+                Spacer()
+                // Text display
+                HStack{
+                    Spacer()
+                    Text(strValue)
+                        .foregroundColor(.white)
+                        .bold()
+                        .font(.system(size: 80))
+                }
+                .padding()
+                
+                //Buttons
+                ForEach(buttons, id: \.self) { row in
+                    HStack(spacing: 12){
+                        ForEach(row, id: \.self) { item in
+                            Button(action: {
+                                self.didTap(button: item)
+                            }, label: {
+                                Text(item.rawValue)
+                                    . font(. system(size: 45))
+                                    .frame(width: self.buttonWidth(item: item), height: self.buttonHeight())
+                                    .background(item.buttonColor)
+                                    .foregroundColor(.white)
+                                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                            })
+                        }
+                    }
+                    .padding(.bottom, 3)
+                }
+            }
+        }
+    }
+    
+    func didTap(button: CalcButton) {
+        switch button {
+        case .add, .subtract, .multiply, .divide, .equal:
+            switch button {
+            case .add:
+                self.currentOperation = .add
+                self.runningNumber = Double(self.strValue) ?? 0
+                print("self.runningNumber: \(self.runningNumber)")
+            case .subtract:
+                self.currentOperation = .subtract
+                self.runningNumber = Double(self.strValue) ?? 0
+            case .multiply:
+                self.currentOperation = .multiply
+                self.runningNumber = Double(self.strValue) ?? 0
+            case .divide:
+                self.currentOperation = .divide
+                self.runningNumber = Double(self.strValue) ?? 0
+            case .equal:
+                let runningValue = self.runningNumber
+                let currentValue = Double(self.strValue) ?? 0
+                switch self.currentOperation {
+                case .add:
+                    self.strValue = "\(runningValue + currentValue)"
+                case .subtract:
+                    self.strValue = "\(runningValue - currentValue)"
+                case .multiply:
+                    self.strValue = "\(runningValue * currentValue)"
+                case .divide:
+                    self.strValue = "\(runningValue / currentValue)"
+                case .none:
+                    break
+                }
+            default:
+                break
+            }
+            
+            if button != .equal {
+                self.strValue = "0"
+            }
+        case .percent:
+            let newNum = 0.01 * (Double(self.strValue) ?? 0)
+            self.strValue = "\(newNum)"
+            print("self.strValue: \(self.strValue)")
+        case .clear:
+            self.strValue = "0"
+            runningNumber = 0
+        case .decimal:
+            if (!self.strValue.contains(".")) {
+                self.strValue = "\(self.strValue)."
+            }
+        case .negative:
+            var tempValue = Double(self.strValue) ?? 0
+            tempValue *= -1
+            self.strValue = "\(tempValue)"
+        default:
+            let number = button.rawValue
+            if (self.strValue == "0") {
+                strValue = number
+            }
+            else {
+                self.strValue = "\(self.strValue)\(number)"
+                print("self.strValue: \(self.strValue)")
+            }
+        }
+    }
+    
+    func buttonWidth(item: CalcButton) -> CGFloat {
+        if (item == .zero) {
+            return 2 * (UIScreen.main.bounds.width - (4*12)) / 4
+        }
+        return (UIScreen.main.bounds.width - (5*12)) / 4
+    }
+    
+    func buttonHeight() -> CGFloat {
+        return (UIScreen.main.bounds.width - (5*12)) / 4
+    }
+}
+
+#Preview {
+    ContentView()
+}</code>
+        </pre>
+    </div>
+
+    <!-- Prism.js Core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+
+    <!-- Prism.js Line Numbers Plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+
+    <!-- Swift Syntax Highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-swift.min.js"></script>
+
+</body>
+
+</html>
