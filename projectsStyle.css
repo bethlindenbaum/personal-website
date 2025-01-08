@@ -54,16 +54,6 @@ body {
     height: width*.4;
 }
 
-.projects-list div i{
-    border-radius: 10px;
-    font-size: 100px;
-    margin-bottom: 30px;
-    width: 100%;
-    height: width*.4;
-    text-align: center;
-    color: #000;
-}
-
 .projects-list div h2{
     font-size: 30px;
     font-weight: 500;
@@ -86,20 +76,4 @@ body {
 .projects-list div:hover{
     background: #87CEEB;
     transform: translateY(-10px);
-}
-
-.btn{
-    display: block;
-    margin: 50px auto;
-    width: fit-content;
-    border: 1px solid #0F52BA;
-    padding: 14px 50px;
-    border-radius: 6px;
-    text-decoration: none;
-    color: white;
-    transition: background 0.5s;
-}
-
-.btn:hover{
-    background: #0F52BA;
 }
