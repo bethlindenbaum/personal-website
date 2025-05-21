@@ -241,6 +241,12 @@ nav .fa-solid{
 @media only screen and (max-width: 600px){
     #header{
         background-image: url(images/phone-background-resized.png);
+        background-size: cover;               /* or contain, if you want full visibility */
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: scroll;        /* prevent Safari bugs */
+        background-color: #171b40;            /* fallback in case of transparency */
+        min-height: 100vh;
     }
 
     .header-text{
@@ -249,12 +255,16 @@ nav .fa-solid{
     }
 
     .header-text h1{
-        font-size: 38px;
+        font-size: 28px;
     }
 
     nav .fa-solid{
         display: block;
         font-size: 25px;
+    }
+
+    nav .fa-solid.fa-bars {
+        cursor: pointer;
     }
 
     nav{
@@ -304,6 +314,23 @@ nav .fa-solid{
     }
 }
 
+@media only screen and (max-height: 600px){
+    #header{
+        background-size: auto 100%;
+        background-repeat: no-repeat;
+        background-attachment: scroll;        /* prevent Safari bugs */
+        background-position: right center;
+        min-height: 100vh;
+    }
+
+    .header-text{
+        margin-top: 10%;
+    }
+
+    .header-text h1{
+        font-size: 46px;
+    }
+}
 
 /* h1 {
     font-family: "Gill Sans", sans-serif;
