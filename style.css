@@ -25,6 +25,7 @@ body {
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
+    background-repeat: no-repeat;
 }
 
 .container{
@@ -142,7 +143,8 @@ nav ul li a:hover::after{
     font-size: 50px;
     margin-bottom: 30px;
     width: 100%;
-    height: width*.4;
+    aspect-ratio: 1.5 / 1;
+    object-fit: cover;
 }
 
 .projects-list div h2{

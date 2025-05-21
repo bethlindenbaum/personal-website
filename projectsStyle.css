@@ -51,7 +51,8 @@ body {
     font-size: 50px;
     margin-bottom: 30px;
     width: 100%;
-    height: width*.4;
+    aspect-ratio: 1.5 / 1; /* width : height = 1 : 0.4 */
+    object-fit: cover;
 }
 
 .projects-list div h2{
