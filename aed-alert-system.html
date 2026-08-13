@@ -1,0 +1,352 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Audio-Visual Alert System for Drone-Delivered AEDs - Beth's Personal Portfolio Website</title>
+    <link rel="stylesheet" href="css/aed-alert-system.css">
+
+    <!-- Prism.js Default Theme -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+
+    <!-- Prism.js Line Numbers Plugin CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet">
+
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <script src="https://kit.fontawesome.com/4306451910.js" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <div class="content">
+        <h1 class="title">Audio-Visual Aid for AEDs</h1>
+        <p class="byline">An audio-visual alert system for drone-delivered AEDs &mdash; Duke University, Pratt School of Engineering</p>
+        <!-- <a class="back-link" href="index.html#projects">&larr; Back to home page</a> -->
+
+        <h2 class="subtitle">Overview</h2>
+        <p>
+            When someone suffers an out-of-hospital cardiac arrest, applying an automated external defibrillator (AED) within the first five minutes raises the survival rate from roughly 10% to 50%.  Rural communities, however, often have no AED nearby, and emergency response times are long.  Our client, Dr. Monique Starks, a cardiologist at Duke University, is working to close that gap by delivering AEDs to the scene of a cardiac arrest by drone.  A drone can put an AED on the ground quickly, but a bystander still has to find it &mdash; in a field, in tall grass, at night, or in the rain.
+        </p>
+        <br>
+        <p>
+            My team designed and built an audio-visual alert system that attaches to a drone-delivered payload and makes it easy to locate after it lands.  The device activates automatically the moment it separates from the drone, flashes a bright multicolored LED strip, and plays a rising sequence of tones from a speaker.  When a bystander picks the device up, an accelerometer detects the motion and the device shuts itself off.  The work began in Duke's Engineering 101 client design course with Augustus Adams, Beth Lindenbaum, Joshua Stasior, and Nora Taylor, and continued through two semesters of Engineering 102 independent study, where we refined the prototype into a more market-ready device and filed an invention disclosure with Duke's Office for Translation and Commercialization.
+        </p>
+
+        <h2 class="subtitle">Defining the Problem</h2>
+        <p>
+            We started by interviewing our client to understand how the drone-AED system actually works and what it needs from an alert device.  The drone hovers and lowers the AED to the ground on a winch from as high as 125 feet, dropping it the last foot or so, and it can land anywhere within roughly a 20&ndash;90 foot radius of the target site.  Dr. Starks needed a device that would activate on deployment and deactivate once the AED was found, that would survive daily missions outdoors without ever being charged, that would weigh ounces rather than pounds so it would not affect the drone's flight, and that would cost only $20&ndash;$40 per unit so it could scale across a fleet.  We also had to design for users of all backgrounds, including those with hearing or visual impairments &mdash; which is why the device signals both ways rather than choosing one.
+        </p>
+        <br>
+        <p>
+            We turned those conversations into a weighted set of design criteria using a pairwise comparison chart, which ranked weather resistance first, audio/visual range second, battery life third, cost fourth, and automatic activation last.
+        </p>
+        <table>
+            <tr>
+                <th>Objective or Constraint</th>
+                <th>Target Value</th>
+                <th>Justification</th>
+            </tr>
+            <tr>
+                <td>Water resistant</td>
+                <td>IP &gt; 54</td>
+                <td>Client consultation; IP54 means dust protected and protected against splashing water.</td>
+            </tr>
+            <tr>
+                <td>Visible and audible</td>
+                <td>&ge; 50 feet</td>
+                <td>Client consultation; the AED is deployed up to 20 feet from the target site.</td>
+            </tr>
+            <tr>
+                <td>Long battery life</td>
+                <td>&gt; 1 year of shelf life</td>
+                <td>Client consultation; missions fly daily and the device should never need charging.</td>
+            </tr>
+            <tr>
+                <td>Cost</td>
+                <td>$20&ndash;$40 per unit</td>
+                <td>Client consultation; low enough to equip an entire drone fleet.</td>
+            </tr>
+            <tr>
+                <td>Automatic activation</td>
+                <td>On deployment, off when found</td>
+                <td>Client consultation; no bystander action should be required.</td>
+            </tr>
+            <tr>
+                <td>Wind resistant</td>
+                <td>Beaufort level 8</td>
+                <td>Client consultation; level 8 wind breaks twigs off trees and impedes progress.</td>
+            </tr>
+            <tr>
+                <td>Cannot cause hearing loss</td>
+                <td>&lt; 85 decibels</td>
+                <td>Long or repeated exposure at or above 85 dB can cause hearing loss (Fink, 2016).</td>
+            </tr>
+            <tr>
+                <td>Cannot impact drone flight</td>
+                <td>&lt; 1 lb</td>
+                <td>Client consultation; the drone cannot fly properly with additional weight.</td>
+            </tr>
+        </table>
+
+        <h2 class="subtitle">Design Process</h2>
+        <p>
+            To get from the problem statement to a design, we decomposed the device into its functions &mdash; connection to the AED, audio alert, visual alert, weatherproofing, battery life, automatic activation, and deactivation &mdash; and brainstormed options for each.  A morph chart combined those options into eleven candidate solutions, which we narrowed with Pugh screening matrices and then a weighted Pugh scoring matrix, using the pairwise ranking of our criteria as the weights.
+        </p>
+        <br>
+        <p>
+            The winning concept paired an Arduino driving an LED strip and dual-frequency speakers with a magnetically triggered activation system, velcro mounting, reflective material, and a plastic waterproof coating.  Building and testing it changed several of those choices: we replaced the magnet with a pull-pin switch and an accelerometer-based shutoff, moved from AA cells to a 9V pack, and swapped the plastic coating for an IP65 project box.  The final design keeps the concept &mdash; automatic activation, dual-channel alerting, weatherproof housing &mdash; with the components that actually survived testing.
+        </p>
+
+        <h2 class="subtitle">Design Solution</h2>
+        <div class="card-list">
+            <div class="card">
+                <h3>Mechanical Activation</h3>
+                <p>A pull-pin switch connects the device to the drone's winch line.  When the payload separates from the drone, the pin is pulled and the device powers on with no user interaction required.</p>
+            </div>
+            <div class="card">
+                <h3>Visual Alert</h3>
+                <p>A WS2812B addressable LED strip, driven by the Adafruit NeoPixel library, cycles through red, gold, and blue so the payload is visible from well over 50 feet, day or night.</p>
+            </div>
+            <div class="card">
+                <h3>Audio Alert</h3>
+                <p>A two-wire speaker buzzer sweeps through five octaves of tones.  The changing pitch is far easier to localize than a single steady tone, and is audible from over 50 feet away.</p>
+            </div>
+            <div class="card">
+                <h3>Automatic Shutoff</h3>
+                <p>A two-axis accelerometer, read through the Arduino's pulse-width inputs, detects when the device is picked up and turns the alerts off.  A five-minute timeout shuts the device down as a backup.</p>
+            </div>
+            <div class="card">
+                <h3>Waterproof Housing</h3>
+                <p>An IP65-rated ABS project box houses the electronics, the 9V battery pack, and the switch, so the device stays functional in rain and wet grass.</p>
+            </div>
+            <div class="card">
+                <h3>Embedded Controller</h3>
+                <p>An Arduino Nano coordinates every subsystem &mdash; the light strip, the speaker, the accelerometer, and the activation switch &mdash; from a single firmware state machine.</p>
+            </div>
+        </div>
+
+        <h2 class="subtitle">How the Firmware Works</h2>
+        <p>
+            The firmware runs as a two-state machine.  In <b>State 1</b> (alerting), the device drives the LED strip and the speaker together: on each pass through the loop the tone frequency doubles, starting at 110 Hz, while every pixel in the 50-LED strip is set to the color that corresponds to the current step of the sequence.  In <b>State 2</b> (off), the speaker is silenced, the strip is cleared to black, and the enable pin is pulled low.
+        </p>
+        <br>
+        <p>
+            The device stays quiet about its own motion for the first five seconds after activation, so the shock of landing and the swing of the winch line cannot trigger a false shutoff.  After that grace period, every iteration of the alert loop calls <code style="display:inline; padding:0; margin:0; background:none; color:#0F52BA;">updateTriggered()</code>, which reads the accelerometer's X and Y pulse widths.  Rather than compare single samples &mdash; which proved far too noisy in testing &mdash; the routine averages seven readings, waits 30 ms, averages seven more, and compares the two averages.  If either axis changes by more than the threshold, the device has been picked up and it switches to State 2.  This averaging scheme was the key fix that made the accelerometer reliable; earlier iterations shut the device off spuriously or ignored a real pickup.
+        </p>
+
+        <h2 class="subtitle">Design Criteria and Testing</h2>
+        <table>
+            <tr>
+                <th>Design Criterion</th>
+                <th>Target Value</th>
+                <th>Test Description</th>
+                <th>Result</th>
+            </tr>
+            <tr>
+                <td>Visual alert</td>
+                <td>Visible from &ge; 50 feet, success rate &ge; 96%</td>
+                <td>Ask users to walk away until they can no longer see the device, then measure that distance (25 trials).</td>
+                <td><span class="pass">PASS</span> &mdash; 25/25 users saw the device from more than 50 feet.  Success rate = 100%.</td>
+            </tr>
+            <tr>
+                <td>Audio alert</td>
+                <td>Audible from &ge; 50 feet, success rate &ge; 96%</td>
+                <td>Ask users to walk away until they can no longer hear the device, then measure that distance (25 trials).</td>
+                <td><span class="pass">PASS</span> &mdash; 25/25 users heard the device from more than 50 feet.  Success rate = 100%.</td>
+            </tr>
+            <tr>
+                <td>Automatic activation</td>
+                <td>Success rate &ge; 96%</td>
+                <td>Attach the device to a makeshift winch system and drop it from heights of 0&ndash;1 feet (30 trials).</td>
+                <td><span class="pass">PASS</span> &mdash; the device activated 29/30 times.  Success rate = 96.7%.</td>
+            </tr>
+            <tr>
+                <td>Water resistance</td>
+                <td>IP rating &gt; 54</td>
+                <td>Spray the device with a hose on the shower setting from several angles for five minutes to simulate rain (3 trials).</td>
+                <td><span class="pass">PASS</span> &mdash; the device remained fully functional 3/3 times, meeting IP55.</td>
+            </tr>
+            <tr>
+                <td>Battery life</td>
+                <td>Works in standby for &gt; 281 hours (~12 days)</td>
+                <td>Leave the device powered on and measure the time until the battery is exhausted (3 trials).</td>
+                <td>In progress &mdash; motivated our work on Arduino sleep mode and on powering the device from the drone or a rechargeable supply.</td>
+            </tr>
+        </table>
+
+        <h2 class="subtitle">Continued Development</h2>
+        <p>
+            After the initial prototype passed its design criteria, we spent two more semesters turning it into something closer to a product.  That work included:
+        </p>
+        <ul>
+            <li>Researching and testing louder, smaller speakers, including an op-amp-driven speaker circuit, to increase the audible range without growing the enclosure.</li>
+            <li>Migrating from the Arduino Nano to a smaller microchip so the electronics footprint would fit a slimmer, AED-mountable housing.</li>
+            <li>Researching Arduino sleep mode and low-power operation to extend standby battery life toward the 12-day target.</li>
+            <li>Sourcing a more durable, waterproof LED strip after the original strip failed during weather testing.</li>
+            <li>Iterating on the accelerometer firmware across several versions until the averaged, two-window comparison eliminated false triggers.</li>
+            <li>Filing an invention disclosure with Duke's Office for Translation and Commercialization and pursuing a provisional patent, and completing the CITI, LMS, and RCR clinical research trainings required to work with our client's team.</li>
+        </ul>
+
+        <h2 class="subtitle">Final Source Code</h2>
+        <p>
+            The complete firmware for the final device is shown below.  It was written in C++ for the Arduino Nano and uses the Adafruit NeoPixel library to drive the LED strip.
+        </p>
+
+        <div id="box">
+            <pre class="line-numbers" data-start="1">
+                <code class="language-cpp">const int LightStringPin = 5;  //pin that connectts to light
+const int numLights = 50;      //number of lights in the string
+const int speakerPin = 8;      //pin that conects to speaker
+
+unsigned long startTime;
+int currentState = 0;
+//If currentState = 1 (accelerometer not triggered)
+//If currentState = 2 (accelerometer triggered)
+unsigned long delayTime = 5000;  //5 seconds
+
+const int xPin = 2;
+const int yPin = 3;
+const int threshold = 7;
+
+#include &lt;Adafruit_NeoPixel.h&gt;
+
+Adafruit_NeoPixel NeoPixel(numLights, LightStringPin, NEO_GRB + NEO_KHZ800);
+bool accelerometerTriggered;
+
+void setup() {
+  Serial.begin(9600);
+
+  NeoPixel.begin();
+  NeoPixel.setBrightness(100);
+
+  currentState = 1;
+  accelerometerTriggered = false;
+  startTime = millis();
+
+  pinMode(xPin, INPUT);
+  pinMode(yPin, INPUT);
+  pinMode(7, OUTPUT);
+}
+
+void loop() {
+  if ((millis() - startTime) &gt; 300000) {
+    currentState = 2;
+  }
+
+  if (currentState == 1) {
+    int t = 55;  //starting tone for speaker
+    digitalWrite(7, HIGH);
+    for (int i = 0; i &lt; 5; i++) {
+      t = t * 2;
+      tone(speakerPin, t, 500);
+
+      //delay + read
+      if ((millis() - startTime) &gt;= delayTime)  //once delayTime seconds passes
+      {
+        //code to read accelerometer and decide whether to turn accelerometerTriggered to true (if it&#x27;s triggered)
+        updateTriggered();
+
+      } else {
+        delay(250);  //should be 300, just 200 right now to make difference clear
+      }
+      if (accelerometerTriggered == true) {
+        currentState = 2;
+      }
+
+      for (int p = 0; p &lt; numLights; p++) {
+        if (i == 0) {
+          NeoPixel.setPixelColor(p, NeoPixel.Color(255, 0, 0));
+          // NeoPixel.show();
+        }
+        if (i == 1) {
+          NeoPixel.setPixelColor(p, NeoPixel.Color(255, 215, 0));
+          // NeoPixel.show();
+        }
+        if (i == 2) {
+          NeoPixel.setPixelColor(p, NeoPixel.Color(0, 0, 255));
+          // NeoPixel.show();
+        }
+        if (i == 3) {
+          NeoPixel.setPixelColor(p, NeoPixel.Color(255, 0, 0));
+          // NeoPixel.show();
+        }
+        if (i == 4) {
+          NeoPixel.setPixelColor(p, NeoPixel.Color(255, 215, 0));
+          // NeoPixel.show();
+        }
+      }
+      NeoPixel.show();
+    }
+  } else {
+    digitalWrite(7, LOW);
+
+    for (int p = 0; p &lt; numLights; p++) {
+      NeoPixel.setPixelColor(p, NeoPixel.Color(0, 0, 0));
+      NeoPixel.show();
+    }
+  }
+}
+
+void updateTriggered() {  //this method takes ~300 ms
+  int x1Total = 0;
+  int y1Total = 0;
+  int x2Total = 0;
+  int y2Total = 0;
+  int pulseX, pulseY;
+  int accelerationX, accelerationY;
+  for (int i = 0; i &lt; 7; i++) {
+    pulseX = pulseIn(xPin, HIGH);
+    pulseY = pulseIn(yPin, HIGH);
+    accelerationX = ((pulseX / 10) - 500);
+    accelerationY = ((pulseY / 10) - 500);
+
+    x1Total = x1Total + accelerationX;
+    y1Total = y1Total + accelerationY;
+  }
+  delay(30);
+  for (int i = 0; i &lt; 7; i++) {
+    pulseX = pulseIn(xPin, HIGH);
+    pulseY = pulseIn(yPin, HIGH);
+    accelerationX = ((pulseX / 10) - 500);
+    accelerationY = ((pulseY / 10) - 500);
+
+    x2Total = x2Total + accelerationX;
+    y2Total = y2Total + accelerationY;
+  }
+
+  int x1Avg = x1Total / 7;
+  int y1Avg = y1Total / 7;
+
+  int x2Avg = x2Total / 7;
+  int y2Avg = y2Total / 7;
+
+  if (abs(x1Avg - x2Avg) &gt; threshold) {
+    accelerometerTriggered = true;
+  }
+  if (abs(y1Avg - y2Avg) &gt; threshold) {
+    accelerometerTriggered = true;
+  }
+}</code>
+            </pre>
+        </div>
+
+        <h2 class="subtitle">Team and Acknowledgements</h2>
+        <p>
+            This project was designed and built at Duke University's Pratt School of Engineering by Beth Lindenbaum, Joshua Stasior, Nora Taylor, and Augustus Adams (Engineering 101).  We would like to thank Dr. Monique Starks (client, cardiologist at Duke University), Dr. Stacy Tantum and Dr. Ann Saterbak (Engineering 101), Steve McClelland (Engineering 102), Dr. Rob Glass (technical advisor), Dagan Trnka (lab manager), Darcy Ayers (teaching assistant), and Erin Yu (writing consultant) for their guidance throughout the design process.
+        </p>
+
+        <a class="back-link" href="index.html#projects">&larr; Back to home page</a>
+    </div>
+
+    <!-- Prism.js Core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+
+    <!-- Prism.js Line Numbers Plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+
+    <!-- C / C++ Syntax Highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+
+</body>
+
+</html>
