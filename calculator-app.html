@@ -4,29 +4,90 @@
 <head>
     <title>Calculator App - Beth's Personal Portfolio Website</title>
     <link rel="stylesheet" href="css/calculator-app.css">
-    
+
     <!-- Prism.js Default Theme -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
-    
+
     <!-- Prism.js Line Numbers Plugin CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet">    
-    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet">
+
     <link rel="icon" type="image/x-icon" href="images/favicon.ico">
     <script src="https://kit.fontawesome.com/4306451910.js" crossorigin="anonymous"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
-    <h1 class="title">Calculator App</h1>
+    <div class="content">
+        <h1 class="title">Calculator App</h1>
+        <p class="byline">An iOS calculator built with Swift and SwiftUI</p>
+        <p class="repo-link"><a href="https://github.com/bethlindenbaum/calculator-app.git" target="_blank"><i class="fa-brands fa-github"></i> View the source code on GitHub</a></p>
 
-    <p>
-        The Calculator App is an iOS app used to perform numerical computation on a mobile device.  The Calculator App was coded using Swift anf SwiftUI.  The Calculator App has digits 0-9, and can perform addition, subtraction, multiplication, and division.  It can also change the sign of the number it is currently showing, and change the number currently showing to a percentage (multiplies the number shown by 0.01).  You can clear the current calculation by pressing the AC button, and you can get the result of the current calculation by pressing the equals sign.  Source code for the Calculator App is shown below, and can also be found on <a href="https://github.com/bethlindenbaum/calculator-app.git" target="_blank">this Github repository</a>.
-    </p>
+        <h2 class="subtitle">Overview</h2>
+        <p>
+            The Calculator App is an iOS app for performing numerical computations on a mobile device.  I built it in Swift and SwiftUI as a way to learn Apple's declarative UI framework end to end &mdash; laying out an interface that adapts to any screen size, driving it entirely from state, and handling all of the input logic behind it.  The app supports the digits 0&ndash;9, addition, subtraction, multiplication, and division, along with a decimal point, sign inversion, a percentage conversion, an all-clear, and an equals key.  The full source code is shown below and is also available on <a href="https://github.com/bethlindenbaum/calculator-app.git" target="_blank">GitHub</a>.
+        </p>
 
-    <h2 class="subtitle"></h2class>Source Code</h2>
+        <img class="screenshot" src="images/calc-vert-pic.png" alt="The Calculator App running on an iPhone">
+        <p class="caption">The Calculator App running on an iPhone.</p>
 
-    <div id="box">
-        <pre class="line-numbers" data-start="1">
-            <code class="language-swift">//  ContentView.swift
+        <h2 class="subtitle">Features</h2>
+        <div class="card-list">
+            <div class="card">
+                <h3>Arithmetic</h3>
+                <p>Addition, subtraction, multiplication, and division, with the pending operand and operator held in state until the equals key is pressed.</p>
+            </div>
+            <div class="card">
+                <h3>Decimal Input</h3>
+                <p>A decimal key that appends a point to the current entry, guarded so a number can never contain two decimal points.</p>
+            </div>
+            <div class="card">
+                <h3>Sign and Percent</h3>
+                <p>A +/- key that flips the sign of the displayed value, and a % key that scales it by 0.01 to convert a number to a percentage.</p>
+            </div>
+            <div class="card">
+                <h3>All Clear</h3>
+                <p>An AC key that resets both the display and the stored running value, so a new calculation starts from a clean state.</p>
+            </div>
+            <div class="card">
+                <h3>Adaptive Layout</h3>
+                <p>Button widths and heights are computed from the device's screen width, so the keypad fills any iPhone correctly instead of relying on fixed sizes.</p>
+            </div>
+            <div class="card">
+                <h3>Custom Styling</h3>
+                <p>A red-to-blue gradient background with a custom color palette, rounded button shapes, and a large right-aligned display.</p>
+            </div>
+        </div>
+
+        <h2 class="subtitle">How It Works</h2>
+        <p>
+            Every button on the keypad is a case of the <code class="inline-code">CalcButton</code> enum, whose raw value is the label drawn on the key.  The enum also owns its own appearance: a computed <code class="inline-code">buttonColor</code> property returns one color for the operators, another for the AC, +/-, and % keys, and a third for the digits, so the visual grouping of the keypad falls directly out of the model rather than being hard-coded into the view.
+        </p>
+        <br>
+        <p>
+            The keypad itself is declared as a two-dimensional array of those cases and rendered with nested <code class="inline-code">ForEach</code> loops inside a <code class="inline-code">VStack</code> of <code class="inline-code">HStack</code>s, which means adding or rearranging a key is a one-line change to the array.  Because the zero key spans two columns, <code class="inline-code">buttonWidth(item:)</code> computes its width as twice a normal key plus the spacing between them, while every other key gets one quarter of the available width.
+        </p>
+        <br>
+        <p>
+            The app's behavior lives in a small amount of state: the string currently on screen, the stored operand, and the pending operation.  Because these are marked <code class="inline-code">@State</code>, SwiftUI re-renders the display automatically whenever they change &mdash; there is no manual UI updating anywhere in the code.  A single <code class="inline-code">didTap(button:)</code> method handles every key press: pressing an operator saves the displayed value as the running number, records which operation is pending, and clears the display for the next operand; pressing equals applies the pending operation to the running number and the current entry; and pressing a digit either replaces a leading zero or appends to the entry already being typed.
+        </p>
+
+        <h2 class="subtitle">Built With</h2>
+        <ul>
+            <li><b>Swift</b> &mdash; the app's logic, including the button model and the calculation engine.</li>
+            <li><b>SwiftUI</b> &mdash; the declarative interface, state management, and layout.</li>
+            <li><b>Xcode</b> &mdash; project configuration, the SwiftUI preview canvas, and the iOS Simulator used for testing.</li>
+        </ul>
+
+        <h2 class="subtitle">Source Code</h2>
+        <p>
+            <b>ContentView.swift</b> contains the color palette, the button model, the keypad layout, and all of the calculation logic.
+        </p>
+
+        <div id="box">
+            <pre class="line-numbers" data-start="1">
+                <code class="language-swift">//
+//  ContentView.swift
 //  Calculator
 //
 //  Created by Beth Lindenbaum on 12/27/24.
@@ -65,25 +126,25 @@ let backgroundGradient = LinearGradient(
 let circleGradient = AngularGradient(colors: [.blue, .purple, .pink, .red, .pink, .purple, .blue], center: .center)
 
 enum CalcButton: String{
-    case one = "1"
-    case two = "2"
-    case three = "3"
-    case four = "4"
-    case five = "5"
-    case six = "6"
-    case seven = "7"
-    case eight = "8"
-    case nine = "9"
-    case zero = "0"
-    case add = "+"
-    case subtract = "-"
-    case multiply = "x"
-    case divide = "/"
-    case equal = "="
-    case clear = "AC"
-    case decimal = "."
-    case percent = "%"
-    case negative = "+/-"
+    case one = &quot;1&quot;
+    case two = &quot;2&quot;
+    case three = &quot;3&quot;
+    case four = &quot;4&quot;
+    case five = &quot;5&quot;
+    case six = &quot;6&quot;
+    case seven = &quot;7&quot;
+    case eight = &quot;8&quot;
+    case nine = &quot;9&quot;
+    case zero = &quot;0&quot;
+    case add = &quot;+&quot;
+    case subtract = &quot;−&quot;
+    case multiply = &quot;×&quot;
+    case divide = &quot;÷&quot;
+    case equal = &quot;=&quot;
+    case clear = &quot;AC&quot;
+    case decimal = &quot;.&quot;
+    case percent = &quot;%&quot;
+    case negative = &quot;+/-&quot;
     
     var buttonColor: Color{
         switch self{
@@ -103,7 +164,7 @@ enum Operation {
 
 struct ContentView: View {
     
-    @State var strValue = "0"
+    @State var strValue = &quot;0&quot;
     @State var numValue = 0
     @State var runningNumber: Double = 0
     @State var currentOperation: Operation = .none
@@ -165,7 +226,7 @@ struct ContentView: View {
             case .add:
                 self.currentOperation = .add
                 self.runningNumber = Double(self.strValue) ?? 0
-                print("self.runningNumber: \(self.runningNumber)")
+                print(&quot;self.runningNumber: \(self.runningNumber)&quot;)
             case .subtract:
                 self.currentOperation = .subtract
                 self.runningNumber = Double(self.strValue) ?? 0
@@ -180,13 +241,13 @@ struct ContentView: View {
                 let currentValue = Double(self.strValue) ?? 0
                 switch self.currentOperation {
                 case .add:
-                    self.strValue = "\(runningValue + currentValue)"
+                    self.strValue = &quot;\(runningValue + currentValue)&quot;
                 case .subtract:
-                    self.strValue = "\(runningValue - currentValue)"
+                    self.strValue = &quot;\(runningValue - currentValue)&quot;
                 case .multiply:
-                    self.strValue = "\(runningValue * currentValue)"
+                    self.strValue = &quot;\(runningValue * currentValue)&quot;
                 case .divide:
-                    self.strValue = "\(runningValue / currentValue)"
+                    self.strValue = &quot;\(runningValue / currentValue)&quot;
                 case .none:
                     break
                 }
@@ -195,43 +256,43 @@ struct ContentView: View {
             }
             
             if button != .equal {
-                self.strValue = "0"
+                self.strValue = &quot;0&quot;
             }
         case .percent:
             let newNum = 0.01 * (Double(self.strValue) ?? 0)
-            self.strValue = "\(newNum)"
-            print("self.strValue: \(self.strValue)")
+            self.strValue = &quot;\(newNum)&quot;
+            print(&quot;self.strValue: \(self.strValue)&quot;)
         case .clear:
-            self.strValue = "0"
+            self.strValue = &quot;0&quot;
             runningNumber = 0
         case .decimal:
-            if (!self.strValue.contains(".")) {
-                self.strValue = "\(self.strValue)."
+            if (!self.strValue.contains(&quot;.&quot;)) {
+                self.strValue = &quot;\(self.strValue).&quot;
             }
         case .negative:
             var tempValue = Double(self.strValue) ?? 0
             tempValue *= -1
-            self.strValue = "\(tempValue)"
+            self.strValue = &quot;\(tempValue)&quot;
         default:
             let number = button.rawValue
-            if (self.strValue == "0") {
+            if (self.strValue == &quot;0&quot;) {
                 strValue = number
             }
             else {
-                self.strValue = "\(self.strValue)\(number)"
-                print("self.strValue: \(self.strValue)")
+                self.strValue = &quot;\(self.strValue)\(number)&quot;
+                print(&quot;self.strValue: \(self.strValue)&quot;)
             }
         }
     }
     
-    func buttonWidth(item: CalcButton) -> CGFloat {
+    func buttonWidth(item: CalcButton) -&gt; CGFloat {
         if (item == .zero) {
             return 2 * (UIScreen.main.bounds.width - (4*12)) / 4
         }
         return (UIScreen.main.bounds.width - (5*12)) / 4
     }
     
-    func buttonHeight() -> CGFloat {
+    func buttonHeight() -&gt; CGFloat {
         return (UIScreen.main.bounds.width - (5*12)) / 4
     }
 }
@@ -239,7 +300,36 @@ struct ContentView: View {
 #Preview {
     ContentView()
 }</code>
-        </pre>
+            </pre>
+        </div>
+
+        <p>
+            <b>CalculatorApp.swift</b> is the app's entry point, which creates the window group and loads the main view.
+        </p>
+
+        <div id="box">
+            <pre class="line-numbers" data-start="1">
+                <code class="language-swift">//
+//  CalculatorApp.swift
+//  Calculator
+//
+//  Created by Beth Lindenbaum on 12/27/24.
+//
+
+import SwiftUI
+
+@main
+struct CalculatorApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+    }
+}</code>
+            </pre>
+        </div>
+
+        <a class="back-link" href="index.html#projects">&larr; Back to home page</a>
     </div>
 
     <!-- Prism.js Core -->
