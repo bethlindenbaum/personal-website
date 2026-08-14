@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Cache Simulator - Beth's Personal Portfolio Website</title>
+    <link rel="stylesheet" href="css/cache-simulator.css">
+    <link rel="stylesheet" href="css/themes.css">
+    <script src="js/themes.js"></script>
+
+    <!-- Prism.js Theme -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
+    >
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css"
+    >
+
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <meta charset="utf-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+    <meta
+        name="description"
+        content="A configurable, trace-driven CPU cache simulator written in Java."
+    >
+</head>
+
+<body>
+    <main class="content">
+        <h1 class="title">Cache Simulator</h1>
+        <p class="byline">
+            A configurable, trace-driven CPU cache simulator written in Java
+        </p>
+
+        <h2 class="subtitle">Overview</h2>
+        <p>
+            This project is a command-line cache simulator that I developed in
+            Java for Duke's Computer Architecture course. It models the movement
+            of data between a processor cache and a 24-bit main-memory address
+            space while processing a trace of load and store operations.
+        </p>
+        <br>
+        <p>
+            The simulator supports configurable cache capacity, block size, and
+            associativity. For every memory access, it determines the block
+            offset, set index, and tag; searches the appropriate cache set;
+            reports whether the access was a hit or miss; and performs any
+            required allocation, replacement, or write-back operation.
+        </p>
+
+        <img
+            class="screenshot cache-overview"
+            src="images/cache-image.png"
+            alt="Diagram of a memory hierarchy containing registers, a cache, and main memory"
+        >
+        <p class="caption">
+            The cache sits between the processor and main memory, retaining
+            recently accessed blocks so future accesses can be completed faster.
+        </p>
+
+        <h2 class="subtitle">Cache Organization</h2>
+        <p>
+            The simulated cache is represented as a three-dimensional byte
+            array indexed by set, way, and byte offset. Parallel arrays store
+            each cache line's tag, valid bit, and dirty bit. This layout lets
+            the same implementation simulate direct-mapped, set-associative,
+            and highly associative caches simply by changing the command-line
+            configuration.
+        </p>
+
+        <div class="card-list">
+            <article class="card">
+                <h3>Configurable Geometry</h3>
+                <p>
+                    Cache capacity, associativity, and block size are supplied
+                    at runtime. The simulator derives the number of sets and
+                    the width of every address field from those values.
+                </p>
+            </article>
+
+            <article class="card">
+                <h3>Tag Matching</h3>
+                <p>
+                    Each access searches every way in its selected set. A hit
+                    requires both a matching tag and an asserted valid bit.
+                </p>
+            </article>
+
+            <article class="card">
+                <h3>FIFO Replacement</h3>
+                <p>
+                    Every set maintains its own replacement pointer. When a new
+                    block is installed, the pointer advances to the next way,
+                    producing a first-in, first-out replacement policy.
+                </p>
+            </article>
+
+            <article class="card">
+                <h3>Write-Back</h3>
+                <p>
+                    Stores update the cached copy and mark its line dirty.
+                    Modified data is written to main memory only when that line
+                    is evicted.
+                </p>
+            </article>
+
+            <article class="card">
+                <h3>Write-Allocate</h3>
+                <p>
+                    A store miss first loads the complete block from memory into
+                    the cache. The requested bytes are then updated in the newly
+                    allocated line.
+                </p>
+            </article>
+
+            <article class="card">
+                <h3>Variable Access Sizes</h3>
+                <p>
+                    The trace format supports multi-byte loads and stores.
+                    Values are reconstructed from individual bytes and printed
+                    in hexadecimal with the correct width.
+                </p>
+            </article>
+        </div>
+
+        <h2 class="subtitle">Breaking Down an Address</h2>
+        <p>
+            Each 24-bit memory address is divided into a tag, a set index, and a
+            block offset. Because the configuration values are powers of two,
+            the simulator calculates these fields using shifts and bit masks
+            instead of division or modulo.
+        </p>
+
+        <div class="address-diagram" aria-label="Breakdown of a 24-bit cache address">
+            <div class="address-field tag-field">
+                <span>Tag</span>
+                <small>Identifies the memory block</small>
+            </div>
+            <div class="address-field set-field">
+                <span>Set Index</span>
+                <small>Selects a cache set</small>
+            </div>
+            <div class="address-field offset-field">
+                <span>Block Offset</span>
+                <small>Selects bytes in the block</small>
+            </div>
+        </div>
+
+        <div class="formula-box">
+            <p>
+                <code class="inline-code">
+                    sets = cache size / (associativity × block size)
+                </code>
+            </p>
+            <p>
+                <code class="inline-code">
+                    offset bits = log₂(block size)
+                </code>
+            </p>
+            <p>
+                <code class="inline-code">
+                    index bits = log₂(number of sets)
+                </code>
+            </p>
+            <p>
+                <code class="inline-code">
+                    tag bits = 24 − index bits − offset bits
+                </code>
+            </p>
+        </div>
+
+        <h2 class="subtitle">Handling a Memory Access</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Access</th>
+                    <th>Hit</th>
+                    <th>Miss</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Load</td>
+                    <td>
+                        Read the requested bytes from the matching cache line.
+                    </td>
+                    <td>
+                        Choose the next FIFO way, write back a dirty victim if
+                        necessary, load the requested block, and return its data.
+                    </td>
+                </tr>
+                <tr>
+                    <td>Store</td>
+                    <td>
+                        Update the matching line and mark it dirty.
+                    </td>
+                    <td>
+                        Perform write-allocate, update the requested bytes, and
+                        mark the newly installed line dirty.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 class="subtitle">Core Implementation</h2>
+        <p>
+            The central data structures mirror the organization of a real
+            set-associative cache. The first index selects a set, the second
+            selects a way, and the third selects an individual byte.
+        </p>
+
+        <div id="box">
+            <pre class="line-numbers"><code class="language-java">final int cacheSize = 1 &lt;&lt; (10 + log2(
+    Integer.parseInt(args[1])
+));
+final int associativity = Integer.parseInt(args[2]);
+final int blockSize = Integer.parseInt(args[3]);
+final int numSets = cacheSize / (associativity * blockSize);
+
+final byte[][][] cache =
+    new byte[numSets][associativity][blockSize];
+
+boolean[][] validBits = new boolean[numSets][associativity];
+boolean[][] dirtyBits = new boolean[numSets][associativity];
+int[][] tags = new int[numSets][associativity];
+
+// Each set has an independent FIFO replacement pointer.
+int[] whereToPut = new int[numSets];
+
+int blockBits = log2(blockSize);
+int setIndexBits = log2(numSets);
+
+int setMask = (1 &lt;&lt; setIndexBits) - 1;
+int setIndex = (address &gt;&gt; blockBits) &amp; setMask;
+int tag = address &gt;&gt;&gt; (setIndexBits + blockBits);
+int offset = address &amp; ((1 &lt;&lt; blockBits) - 1);</code></pre>
+        </div>
+
+        <h2 class="subtitle">Example Trace</h2>
+        <p>
+            The simulator reads one memory access per line. Store operations
+            include the value to write, while loads specify an address and a
+            byte count. Its output exposes the cache's behavior by identifying
+            hits, misses, replacements, and dirty write-backs.
+        </p>
+
+        <div class="trace-grid">
+            <div>
+                <h3>Input</h3>
+                <pre><code class="language-none">store 0xd53170 4 7d2f13ac
+load  0xd53172 1
+store 0xd53170 2 f0b1
+load  0xd53170 4</code></pre>
+            </div>
+
+            <div>
+                <h3>Output Format</h3>
+                <pre><code class="language-none">store 0xd53170 miss
+load 0xd53172 hit 13
+store 0xd53170 hit
+load 0xd53170 hit f0b113ac</code></pre>
+            </div>
+        </div>
+
+        <h2 class="subtitle">Testing</h2>
+        <p>
+            The project includes an automated test matrix with 53 cache
+            configurations. The tests vary capacity from small one-kilobyte
+            caches to larger 128-kilobyte caches, associativity from one to
+            sixteen ways, and block sizes from four to 512 bytes.
+        </p>
+
+        <div class="card-list">
+            <article class="card">
+                <h3>Basic Loads and Stores</h3>
+                <p>
+                    Verifies byte ordering, offsets, repeated accesses, and
+                    correct values after stores.
+                </p>
+            </article>
+
+            <article class="card">
+                <h3>Replacement Tests</h3>
+                <p>
+                    Sends several addresses to the same set to verify FIFO
+                    victim selection and clean or dirty eviction reporting.
+                </p>
+            </article>
+
+            <article class="card">
+                <h3>Boundary Tests</h3>
+                <p>
+                    Exercises accesses near the edges of cache blocks and checks
+                    offset calculations for different block sizes.
+                </p>
+            </article>
+
+            <article class="card">
+                <h3>Capacity Tests</h3>
+                <p>
+                    Varies cache capacity and associativity to confirm that set
+                    count and address decomposition adapt correctly.
+                </p>
+            </article>
+
+            <article class="card">
+                <h3>Sequential Walks</h3>
+                <p>
+                    Walks through memory using several access and block sizes,
+                    demonstrating spatial locality and repeated cache hits.
+                </p>
+            </article>
+
+            <article class="card">
+                <h3>Random Traces</h3>
+                <p>
+                    Uses larger randomized workloads to test the complete cache
+                    state machine under many interleaved loads and stores.
+                </p>
+            </article>
+        </div>
+
+        <h2 class="subtitle">What I Learned</h2>
+        <p>
+            Building the simulator turned cache organization from an abstract
+            diagram into a concrete algorithm. I had to reason carefully about
+            how a single address maps to a set, how tags distinguish blocks
+            mapped to that set, and how valid and dirty metadata change after
+            every operation. The project also showed how replacement and write
+            policies interact: a store can affect main memory much later than
+            the original instruction, when an unrelated access eventually
+            evicts the dirty line.
+        </p>
+
+        <h2 class="subtitle">Built With</h2>
+        <ul>
+            <li>
+                <b>Java</b> — cache state, trace parsing, address calculations,
+                and memory-access simulation.
+            </li>
+            <li>
+                <b>24-bit simulated memory</b> — a 16 MiB byte array representing
+                main memory.
+            </li>
+            <li>
+                <b>Python test harness</b> — automated execution and comparison
+                across 53 cache configurations.
+            </li>
+            <li>
+                <b>Git</b> — incremental development and regression tracking.
+            </li>
+        </ul>
+
+        <a class="back-link" href="index.html#projects">
+            &larr; Back to home page
+        </a>
+    </main>
+
+    <!-- Prism.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+</body>
+
+</html>
