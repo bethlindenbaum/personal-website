@@ -6,8 +6,8 @@
 }
 
 body {
-    background: #171b40;
-    color: white;
+    background: var(--bg);
+    color: var(--text);
     margin: 10;
     padding: 10;
     text-align: left;
@@ -25,7 +25,7 @@ body {
 .subtitle{
     font-size: 60px;
     font-weight: 600;
-    color: white;
+    color: var(--heading);
     text-align: center;
 }
 
@@ -38,7 +38,8 @@ body {
 
 .projects-list div{
     padding: 40px;
-    background: #0F52BA;
+    background: var(--card-bg);
+    color: var(--card-text);
     /* padding: 40px; */
     font-size: 13px;
     font-weight: 300;
@@ -67,7 +68,7 @@ body {
 
 .projects-list div a{
     text-decoration: none;
-    color: white;
+    color: inherit;
     font-size: 12 px;
     margin-top: 20px;
     display: inline-block;
@@ -75,6 +76,7 @@ body {
 }
 
 .projects-list div:hover{
-    background: #87CEEB;
+    background: var(--card-hover);
+    color: var(--card-hover-text);
     transform: translateY(-10px);
 }

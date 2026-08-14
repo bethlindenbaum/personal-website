@@ -5,7 +5,7 @@
 }
 
 body {
-    background: #87CEEB;
+    background: var(--doc-bg);
     color: black;
     font-family: "Gill Sans", sans-serif;
 }
@@ -45,7 +45,7 @@ p{
 }
 
 a{
-    color: #0F52BA;
+    color: var(--doc-accent);
 }
 
 .back-link{
@@ -112,7 +112,7 @@ th, td{
 }
 
 th{
-    background: #0F52BA;
+    background: var(--doc-accent);
     color: white;
     font-weight: 500;
 }
@@ -182,7 +182,7 @@ pre.line-numbers {
     padding: 0;
     margin: 0;
     background: none;
-    color: #0F52BA;
+    color: var(--doc-accent);
     font-family: 'Courier New', Courier, monospace;
 }
 

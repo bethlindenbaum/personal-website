@@ -19,6 +19,9 @@
     --btn-text: #ffffff;
     --nav-panel-bg: #0F52BA;
     --on-image: #ffffff;
+    /* project write-up pages (light layout) */
+    --doc-bg: #87CEEB;
+    --doc-accent: #0F52BA;
 }
 
 /* deep navy base, pink headline accent, blue cards */
@@ -37,6 +40,8 @@
     --btn-text: #ffffff;
     --nav-panel-bg: #2f3a8f;
     --on-image: #ffffff;
+    --doc-bg: #f6dfe8;
+    --doc-accent: #2f3a8f;
 }
 
 /* electric blue base with hot pink accents */
@@ -55,6 +60,8 @@
     --btn-text: #ffffff;
     --nav-panel-bg: #1f4fa8;
     --on-image: #ffffff;
+    --doc-bg: #cfe0ff;
+    --doc-accent: #1f4fa8;
 }
 
 /* soft light theme: blush background, navy text, berry accents */
@@ -73,6 +80,8 @@
     --btn-text: #1f2547;
     --nav-panel-bg: #3f6fd1;
     --on-image: #ffffff;
+    --doc-bg: #fdf4f8;
+    --doc-accent: #3f6fd1;
 }
 
 /* plum/orchid base with periwinkle cards */
@@ -91,6 +100,8 @@
     --btn-text: #ffffff;
     --nav-panel-bg: #4c5fd7;
     --on-image: #ffffff;
+    --doc-bg: #e5e0f7;
+    --doc-accent: #4c5fd7;
 }
 
 /* pale ice blue base, deep navy text, rose accents */
@@ -109,6 +120,8 @@
     --btn-text: #16233f;
     --nav-panel-bg: #16233f;
     --on-image: #ffffff;
+    --doc-bg: #dfeaf7;
+    --doc-accent: #16233f;
 }
 
 /* ---------- theme picker widget ---------- */
@@ -127,6 +140,10 @@
     border: 1px solid rgba(255, 255, 255, 0.25);
     backdrop-filter: blur(6px);
     max-width: 220px;
+}
+
+.theme-picker *{
+    background-color: transparent;
 }
 
 .theme-picker p{
