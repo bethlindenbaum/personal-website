@@ -81,6 +81,18 @@
     text-align: center;
 }
 
+#box pre.line-numbers {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 3.8em;
+}
+
+#box pre.line-numbers code {
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+
 .trace-grid pre {
     width: 100%;
     height: 100%;
