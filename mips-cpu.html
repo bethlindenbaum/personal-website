@@ -1,0 +1,237 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>16-bit MIPS CPU - Beth's Personal Portfolio Website</title>
+    <link rel="stylesheet" href="css/mips-cpu.css">
+
+    <!-- Prism.js Default Theme -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+
+    <!-- Prism.js Line Numbers Plugin CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet">
+
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <script src="https://kit.fontawesome.com/4306451910.js" crossorigin="anonymous"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <div class="content">
+        <h1 class="title">16-bit MIPS CPU</h1>
+        <p class="byline">A single-cycle processor built from gates in Logisim Evolution</p>
+
+        <h2 class="subtitle">Overview</h2>
+        <p>
+            This project is a working 16-bit processor that I designed and built gate by gate in Logisim Evolution for Duke's Computer Architecture course.  It implements the Duke 250/16 &mdash; a MIPS-like, word-addressed RISC architecture with a 16-instruction ISA &mdash; as a single-cycle machine, meaning every instruction is fetched, decoded, executed, and written back within one clock cycle.  Starting from the architecture specification alone, I built the datapath, the control logic, and every arithmetic component from primitive gates, then debugged the whole machine by tracing real assembly programs through it.  The finished CPU passes all eight of the course's automated test programs, covering arithmetic, boolean logic, shifting, memory access, control flow, recursion with a software-managed stack, and keyboard/TTY I/O.
+        </p>
+
+        <img class="screenshot wide" src="images/cpu.circ-screenshot.png" alt="The main datapath of the CPU in Logisim Evolution">
+        <p class="caption">The main circuit: program counter and instruction ROM (left), register file and ALU (right), control decoder and data memory (bottom).</p>
+
+        <h2 class="subtitle">The Architecture</h2>
+        <p>
+            The Duke 250/16 is a 16-bit, word-addressed architecture with eight general purpose registers, <code class="inline-code">$r0</code> through <code class="inline-code">$r7</code>.  Register <code class="inline-code">$r0</code> is hardwired to zero, <code class="inline-code">$r7</code> serves as the link register for function calls, and <code class="inline-code">$r6</code> is used by convention as the stack pointer.  It follows a Harvard model, with instruction memory in a ROM and data memory in a RAM, so instruction fetch and data access happen in the same cycle without conflicting.  All sixteen instructions are 16 bits wide and fall into three formats:
+        </p>
+        <table>
+            <tr>
+                <th>Format</th>
+                <th>Fields</th>
+                <th>Instructions</th>
+            </tr>
+            <tr>
+                <td>R-type</td>
+                <td>opcode (4), rs (3), rt (3), rd (3), shamt (3)</td>
+                <td><code class="inline-code">add</code>, <code class="inline-code">sub</code>, <code class="inline-code">not</code>, <code class="inline-code">xor</code>, <code class="inline-code">sll</code>, <code class="inline-code">srl</code>, <code class="inline-code">jr</code>, <code class="inline-code">input</code>, <code class="inline-code">output</code></td>
+            </tr>
+            <tr>
+                <td>I-type</td>
+                <td>opcode (4), rs (3), rt (3), immediate (6, signed)</td>
+                <td><code class="inline-code">addi</code>, <code class="inline-code">lw</code>, <code class="inline-code">sw</code>, <code class="inline-code">beqz</code>, <code class="inline-code">blt</code></td>
+            </tr>
+            <tr>
+                <td>J-type</td>
+                <td>opcode (4), address (12)</td>
+                <td><code class="inline-code">j</code>, <code class="inline-code">jal</code></td>
+            </tr>
+        </table>
+
+        <h2 class="subtitle">What I Built</h2>
+        <div class="card-list">
+            <div class="card">
+                <h3>ALU</h3>
+                <p>A 16-bit ALU supporting addition, subtraction, XOR, NOT, and both shift directions, with a zero flag and a less-than result that the branch logic uses to resolve <code class="inline-code">beqz</code> and <code class="inline-code">blt</code>.</p>
+            </div>
+            <div class="card">
+                <h3>Adders</h3>
+                <p>A one-bit full adder built from gates, chained into a 16-bit ripple-carry adder that serves both the ALU and the PC increment path.</p>
+            </div>
+            <div class="card">
+                <h3>Register File</h3>
+                <p>Eight 16-bit registers with two read ports and one write port.  Reads are driven by a decoder and tri-state buffers rather than a multiplexer, which is faster in a real implementation, and a write to <code class="inline-code">$r0</code> is suppressed so it always reads zero.</p>
+            </div>
+            <div class="card">
+                <h3>Barrel Shifters</h3>
+                <p>Separate left and right shifters built from multiplexer stages, combined into one shifter unit that handles <code class="inline-code">sll</code> and logical <code class="inline-code">srl</code> by the 3-bit shift amount.</p>
+            </div>
+            <div class="card">
+                <h3>Sign Extenders</h3>
+                <p>Six-bit and twelve-bit sign extension units that widen I-type immediates and J-type addresses to the full 16-bit datapath width.</p>
+            </div>
+            <div class="card">
+                <h3>Program Counter</h3>
+                <p>A PC register with asynchronous reset, plus the next-address logic that selects between PC+1, a branch target computed as PC+1+offset, a jump address, and a register value for <code class="inline-code">jr</code>.</p>
+            </div>
+        </div>
+
+        <h2 class="subtitle">How the Datapath Works</h2>
+        <p>
+            Each cycle begins with the program counter indexing the instruction ROM.  The fetched word is split into its fields by bit position and the top four bits &mdash; the opcode &mdash; drive a decoder whose sixteen outputs are combined by a small network of OR gates into every control signal the datapath needs: which ALU operation to perform, whether the ALU's second operand comes from a register or a sign-extended immediate, which register the result is written to, whether the register file and data memory should write at all, whether the keyboard and TTY are enabled, and which of the four possible next addresses the PC should take.  Because the control logic is purely combinational, the entire instruction completes in one cycle.
+        </p>
+        <br>
+        <p>
+            Timing had to be handled carefully: the register file and TTY are clocked on the rising edge while the PC, data memory, and keyboard are clocked on the falling edge, so that values written in one cycle are stable before the next fetch.  Logisim Evolution's RAM also takes non-zero time to respond, so the data memory sits behind a memory latch that holds the address, data, and enable signals steady while the RAM settles.
+        </p>
+
+        <h2 class="subtitle">Testing and Debugging</h2>
+        <p>
+            The CPU is verified by eight assembly programs run through Logisim's command-line simulator, which compares the contents of every register against expected values after a fixed number of cycles.  Debugging a circuit this size is not something you can do by guessing &mdash; the productive loop was to write or read a small assembly program, run it through the provided instruction-set simulator to get the correct register trace, then single-step the same program in Logisim and compare register values cycle by cycle until the first divergence pointed at the faulty subcircuit.
+        </p>
+        <table>
+            <tr>
+                <th>Test Program</th>
+                <th>What It Exercises</th>
+                <th>Result</th>
+            </tr>
+            <tr>
+                <td>simple</td>
+                <td>Basic instruction fetch, decode, and register writeback.</td>
+                <td><span class="pass">PASS</span></td>
+            </tr>
+            <tr>
+                <td>arithmetic</td>
+                <td><code class="inline-code">add</code>, <code class="inline-code">sub</code>, and <code class="inline-code">addi</code> with signed immediates.</td>
+                <td><span class="pass">PASS</span></td>
+            </tr>
+            <tr>
+                <td>boolean</td>
+                <td><code class="inline-code">not</code> and <code class="inline-code">xor</code> across the full 16-bit width.</td>
+                <td><span class="pass">PASS</span></td>
+            </tr>
+            <tr>
+                <td>shift</td>
+                <td><code class="inline-code">sll</code> and logical <code class="inline-code">srl</code> by every shift amount.</td>
+                <td><span class="pass">PASS</span></td>
+            </tr>
+            <tr>
+                <td>memory</td>
+                <td><code class="inline-code">lw</code> and <code class="inline-code">sw</code> through the memory latch and RAM.</td>
+                <td><span class="pass">PASS</span></td>
+            </tr>
+            <tr>
+                <td>control</td>
+                <td><code class="inline-code">beqz</code>, <code class="inline-code">blt</code>, <code class="inline-code">j</code>, <code class="inline-code">jal</code>, and <code class="inline-code">jr</code> branch and jump targets.</td>
+                <td><span class="pass">PASS</span></td>
+            </tr>
+            <tr>
+                <td>recurse</td>
+                <td>Recursive Fibonacci using the link register and a software-managed stack.</td>
+                <td><span class="pass">PASS</span></td>
+            </tr>
+            <tr>
+                <td>io</td>
+                <td>Non-blocking <code class="inline-code">input</code> from the keyboard and <code class="inline-code">output</code> to the TTY.</td>
+                <td><span class="pass">PASS</span></td>
+            </tr>
+        </table>
+
+        <h2 class="subtitle">Sample Program</h2>
+        <p>
+            Below is the recursion test, written in Duke 250/16 assembly.  It computes a Fibonacci number recursively, which means the CPU has to get function calls right end to end: saving the return address in <code class="inline-code">$r7</code> before each call, pushing and popping callee-saved registers on a stack that the program manages itself, and returning through <code class="inline-code">jr</code>.  This was the most demanding test of the design, since a single bug anywhere in the branch, memory, or register-write paths breaks it.
+        </p>
+
+        <div id="box">
+            <pre class="line-numbers" data-start="1">
+                <code class="language-armasm">.text
+# Compute fibonaccis using recursion
+# We&#x27;ll need some calling conventions to pull this off
+# Registers:
+#  r0   zero
+#  r1   argument (like a#)
+#  r2   caller-saved (like t#)
+#  r3-4 callee-saved (like s#)
+#  r5   return value (like v#)
+#  r6   stack pointer (like sp)
+#  r7   return address (like ra)
+
+# Calculate fib(5) (which, via recursion, will end up using fib(4)..fib(0))
+main:
+    # Load the addr of stack pointer (32768 -- we&#x27;ll pull this from memory)
+    la $r1, stack       # get the address of the stack pointer from global memory
+    lw $r6, 0($r1)      # set start of stack
+    
+    addi $r1, $r0, 4    # set argument to 4
+    jal fib             # r5 (return value) should be 5, as fib(4)==5
+    la $r1, result
+    sw $r5, 0($r1)      # store the result into global memory
+    halt
+
+fib:
+    addi $r6, $r6, -3   # reserve 3 words on stack (r6 is stack pointer, like $sp)
+    sw $r3, 0($r6)      # save callee-saved regs r3,r4
+    sw $r4, 1($r6)
+    sw $r7, 2($r6)      # save return address r7 (like $ra)
+
+    addi $r2, $r0, 2
+    blt $r1, $r2, _base_case # check base case of if f(n) = 0 or 1 return 1
+    
+    # recursion case
+    add $r3, $r0, $r1   # r3 gets r1 (the argument) for safe keeping
+    addi $r1, $r1, -1   # set argument for recursion fib(n-1)
+    jal fib             # do fib(n-1)    
+    add $r4, $r0, $r5   # get answer into r4 for safe keeping
+    addi $r1, $r3, -2   # set argument for recursion fib(n-2)
+    jal fib             # do fib(n-2)
+    add $r5, $r5, $r4   # sum fib(n-1) and fib(n-2) and put into our return value
+    j _return           # goto return
+
+    # base case
+_base_case:
+    addi $r5, $r0, 1    # base case for fib(0) or fib(1) is 1, set that return value
+
+_return:
+    lw $r3, 0($r6)      # restore callee-saved regs r3,r4
+    lw $r4, 1($r6)      
+    lw $r7, 2($r6)      # restore return address r7 (like $ra)
+    addi $r6, $r6, 3    # collapse stack frame (r6 is stack pointer, like $sp)
+    jr $r7              # return
+
+.data
+stack: .word 32767      # address of the top of the stack -- used for initializaiton
+result: .word 0         # the answer will be stored here before the program ends</code>
+            </pre>
+        </div>
+
+        <h2 class="subtitle">Built With</h2>
+        <ul>
+            <li><b>Logisim Evolution</b> &mdash; schematic capture and simulation of the processor, built only from wiring, gates, plexers, D flip-flops, ROM, RAM, and I/O primitives.</li>
+            <li><b>Duke 250/16 assembly</b> &mdash; the test and demo programs run on the finished CPU.</li>
+            <li><b>Command-line simulation</b> &mdash; automated register-level regression testing against expected output.</li>
+        </ul>
+
+        <a class="back-link" href="index.html#projects">&larr; Back to home page</a>
+    </div>
+
+    <!-- Prism.js Core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+
+    <!-- Prism.js Line Numbers Plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+
+    <!-- Assembly Syntax Highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-armasm.min.js"></script>
+
+</body>
+
+</html>
