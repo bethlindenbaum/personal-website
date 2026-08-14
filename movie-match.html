@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>MovieMatch - Beth's Personal Portfolio Website</title>
+    <link rel="stylesheet" href="css/movie-match.css">
+    <link rel="stylesheet" href="css/themes.css">
+    <script src="js/themes.js"></script>
+    <link rel="icon" type="image/svg+xml" href="images/moviematch-favicon-transparent.svg">
+    <script src="https://kit.fontawesome.com/4306451910.js" crossorigin="anonymous"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MovieMatch is a full-stack web app that helps groups find a movie everyone wants to watch.">
+</head>
+
+<body>
+    <main class="content">
+        <h1 class="title">MovieMatch</h1>
+        <p class="byline">A full-stack web app for finding a movie everyone wants to watch</p>
+        <p class="repo-link">
+            <a href="https://github.com/bethlindenbaum/movie-night-matcher" target="_blank" rel="noopener noreferrer">
+                <i class="fa-brands fa-github" aria-hidden="true"></i> View the source code on GitHub
+            </a>
+        </p>
+
+        <h2 class="subtitle">Overview</h2>
+        <p>
+            Choosing a movie with friends often means searching several streaming services, comparing tastes, and trying to remember what everyone has already suggested. I built MovieMatch to bring that process into one place. Each person creates an account, records their streaming services and favorite genres, joins a group, and selects movies they would be happy to watch. MovieMatch then compares everyone's choices and recommends the strongest group match.
+        </p>
+        <br>
+        <p>
+            The app combines a responsive browser interface with a Supabase backend and live movie data from TMDB. It supports persistent accounts, friends, groups, personal watchlists, realtime group selections, streaming availability, and recommendations tailored to the people currently choosing together.
+        </p>
+
+        <div class="brand-showcase" aria-label="MovieMatch logo and product summary">
+            <img src="images/moviematch-favicon-transparent.svg" alt="MovieMatch logo">
+            <div>
+                <span class="eyebrow">Pick together. Watch sooner.</span>
+                <h2>One catalog, everyone's preferences.</h2>
+                <p>MovieMatch narrows a live movie catalog to the services a group can access, then ranks the results around their shared interests.</p>
+            </div>
+        </div>
+
+        <h2 class="subtitle">Features</h2>
+        <div class="card-list">
+            <article class="card">
+                <h3>Personalized Discovery</h3>
+                <p>Popular, top-rated, new-release, and personalized rows make it easy to browse movies that fit the current group's genres and services.</p>
+            </article>
+            <article class="card">
+                <h3>Friends and Groups</h3>
+                <p>Users connect by username and create movie-night groups, giving every group its own members and shared selection history.</p>
+            </article>
+            <article class="card">
+                <h3>Group Matching</h3>
+                <p>The app compares every member's picks, finds unanimous choices, and uses group preferences and ratings to break ties.</p>
+            </article>
+            <article class="card">
+                <h3>Realtime Updates</h3>
+                <p>Selections update across devices as group members add or remove movies, keeping everyone in sync during the decision.</p>
+            </article>
+            <article class="card">
+                <h3>Streaming Availability</h3>
+                <p>Movie results are filtered using the group's streaming subscriptions, with regional provider data supplied by JustWatch through TMDB.</p>
+            </article>
+            <article class="card">
+                <h3>My List</h3>
+                <p>Each account has a private watchlist for saving interesting movies without adding them to a group's current choices.</p>
+            </article>
+        </div>
+
+        <h2 class="subtitle">How Matching Works</h2>
+        <div class="match-flow">
+            <div><span>1</span><strong>Set preferences</strong><small>Members choose genres and streaming services.</small></div>
+            <div><span>2</span><strong>Select movies</strong><small>Each person saves the titles they want to watch.</small></div>
+            <div><span>3</span><strong>Compare picks</strong><small>MovieMatch finds the intersection of every member's list.</small></div>
+            <div><span>4</span><strong>Choose a winner</strong><small>Shared picks are ranked by group tastes and TMDB rating.</small></div>
+        </div>
+        <p>
+            A unanimous selection always takes priority. If the group shares several choices, MovieMatch scores those movies using the members' preferred genres and each movie's TMDB rating. If no movie has been selected by everyone yet, the app shows the title with the most support as the group's closest current match.
+        </p>
+
+        <h2 class="subtitle">Application Architecture</h2>
+        <div class="architecture" aria-label="MovieMatch application architecture">
+            <div class="architecture-box">
+                <strong>Browser App</strong>
+                <small>Responsive interface, discovery, lists, groups, and matching</small>
+            </div>
+            <div class="architecture-arrow" aria-hidden="true">↔</div>
+            <div class="architecture-box">
+                <strong>Supabase</strong>
+                <small>Authentication, Postgres, Row Level Security, and Realtime</small>
+            </div>
+            <div class="architecture-arrow" aria-hidden="true">↔</div>
+            <div class="architecture-box">
+                <strong>TMDB Edge Function</strong>
+                <small>Movie metadata, recommendations, and watch providers</small>
+            </div>
+        </div>
+        <p>
+            The browser uses Supabase Auth for email and password accounts and stores profiles, friendships, groups, selections, and personal lists in Postgres. A server-side Edge Function makes TMDB requests, so the TMDB credential never appears in browser code. It returns current movie details, artwork, cast, ratings, genres, and regional provider availability to the interface.
+        </p>
+
+        <h2 class="subtitle">Data and Security</h2>
+        <p>
+            I designed the database around separate records for profiles, friendships, groups, group membership, movie selections, and personal lists. Database functions handle multi-step operations such as adding a friendship in both directions and creating a group with its initial members. Supabase Realtime publishes changes to group selections so the browser can refresh the active group when another member makes a choice.
+        </p>
+        <br>
+        <p>
+            Row Level Security enforces ownership at the database layer: users can update only their own profile, personal lists remain private, group data is visible only to members, and users can add or delete only their own selections. The browser receives only Supabase's publishable key; the private TMDB token stays in the Edge Function's server-side environment.
+        </p>
+
+        <h2 class="subtitle">Built With</h2>
+        <ul>
+            <li><b>HTML, CSS, and JavaScript</b> &mdash; the responsive interface, client-side state, recommendation scoring, and group-matching experience.</li>
+            <li><b>Supabase Auth and Postgres</b> &mdash; accounts and persistent data for profiles, friendships, groups, selections, and personal lists.</li>
+            <li><b>Supabase Realtime</b> &mdash; live synchronization of movie selections across group members' devices.</li>
+            <li><b>Supabase Edge Functions</b> &mdash; a secure server-side layer between the browser and the movie API.</li>
+            <li><b>TMDB API</b> &mdash; current movie metadata, posters, ratings, genres, cast, and watch-provider data.</li>
+        </ul>
+
+        <a class="back-link" href="index.html#projects">&larr; Back to home page</a>
+    </main>
+</body>
+
+</html>
