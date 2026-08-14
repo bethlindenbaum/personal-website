@@ -10,8 +10,8 @@ html{
 }
 
 body {
-    background: #171b40;
-    color: white;
+    background: var(--bg);
+    color: var(--text);
     /* margin: 10;
     padding: 10; */
     text-align: left;
@@ -46,7 +46,7 @@ nav ul li{
 }
 
 nav ul li a{
-    color: white;
+    color: var(--on-image);
     text-decoration: none;
     font-size: 20px;
     position: relative;
@@ -56,7 +56,7 @@ nav ul li a::after{
     content: '';
     width: 0;
     height: 3px;
-    background: #87CEEB;
+    background: var(--accent);
     position: absolute;
     left: 0;
     bottom: -6px;
@@ -70,7 +70,7 @@ nav ul li a:hover::after{
 .header-text{
     margin-top: 20%;
     font-size: 30px;
-    color: white;
+    color: var(--on-image);
     /* line-height: 1; */
 }
 
@@ -81,13 +81,13 @@ nav ul li a:hover::after{
 }
 
 .header-text h1 span{
-    color: #87CEEB;   
+    color: var(--accent);   
 }
 
 /* -----------about-------------- */
 #about{
     padding: 80px 0;
-    color: #d2cfcf;
+    color: var(--text-muted);
 }
 
 .row{
@@ -115,7 +115,7 @@ nav ul li a:hover::after{
 .subtitle{
     font-size: 60px;
     font-weight: 600;
-    color: white
+    color: var(--heading)
 }
 
 /* ----------projects----------- */
@@ -132,7 +132,8 @@ nav ul li a:hover::after{
 
 .projects-list div{
     padding: 40px;
-    background: #0F52BA;
+    background: var(--card-bg);
+    color: var(--card-text);
     /* padding: 40px; */
     font-size: 13px;
     font-weight: 300;
@@ -161,7 +162,7 @@ nav ul li a:hover::after{
 
 .projects-list div a{
     text-decoration: none;
-    color: white;
+    color: inherit;
     font-size: 12 px;
     margin-top: 20px;
     display: inline-block;
@@ -169,7 +170,8 @@ nav ul li a:hover::after{
 }
 
 .projects-list div:hover{
-    background: #87CEEB;
+    background: var(--card-hover);
+    color: var(--card-hover-text);
     transform: translateY(-10px);
 }
 
@@ -177,16 +179,17 @@ nav ul li a:hover::after{
     display: block;
     margin: 50px auto;
     width: fit-content;
-    border: 1px solid #0F52BA;
+    border: 1px solid var(--btn-border);
     padding: 14px 50px;
     border-radius: 6px;
     text-decoration: none;
-    color: white;
-    transition: background 0.5s;
+    color: var(--btn-text);
+    transition: background 0.5s, color 0.5s;
 }
 
 .btn:hover{
-    background: #0F52BA;
+    background: var(--btn-hover-bg);
+    color: #ffffff;
 }
 
 /* ------------links------------ */
@@ -210,12 +213,12 @@ nav ul li a:hover::after{
 
 .links-list a i{
     font-size: 70px;
-    color: white;
+    color: var(--text);
     transition: color 0.5s;
 }
 
 .links-list a p{
-    color: white;
+    color: var(--text);
     margin-top: 10px;
     text-decoration: none;
     text-align: center;
@@ -227,7 +230,7 @@ nav ul li a:hover::after{
 }
 
 .links-list a i:hover{
-    color: #87CEEB;
+    color: var(--accent);
 }
   
 .links{
@@ -240,6 +243,7 @@ nav ul li a:hover::after{
 
 nav .fa-solid{
     display: none;
+    color: var(--on-image);
 }
 
 @media only screen and (max-width: 600px){
@@ -248,7 +252,7 @@ nav .fa-solid{
         background-size: cover;               /* or contain, if you want full visibility */
         background-position: center;
         background-repeat: no-repeat;
-        background-color: #171b40;            /* fallback in case of transparency */
+        background-color: var(--bg);          /* fallback in case of transparency */
         min-height: 100vh;
     }
 
@@ -277,7 +281,7 @@ nav .fa-solid{
     }
 
     nav ul{
-        background: #0F52BA;
+        background: var(--nav-panel-bg);
         position: fixed;
         top: 0;
         right: -200px;
