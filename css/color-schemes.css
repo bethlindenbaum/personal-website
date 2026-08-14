@@ -1,0 +1,207 @@
+/* ---------- color themes ----------
+   Each palette sets the same variables, so the whole site can be
+   restyled by changing data-theme on <html>. Defaults below match
+   the original sapphire/sky-blue scheme. */
+
+:root,
+[data-theme="sapphire"]{
+    --bg: #171b40;
+    --text: #ffffff;
+    --text-muted: #d2cfcf;
+    --heading: #ffffff;
+    --accent: #87CEEB;
+    --card-bg: #0F52BA;
+    --card-hover: #87CEEB;
+    --card-text: #ffffff;
+    --card-hover-text: #ffffff;
+    --btn-border: #0F52BA;
+    --btn-hover-bg: #0F52BA;
+    --btn-text: #ffffff;
+    --nav-panel-bg: #0F52BA;
+    --on-image: #ffffff;
+    /* project write-up pages (light layout) */
+    --doc-bg: #87CEEB;
+    --doc-accent: #0F52BA;
+}
+
+/* deep navy base, pink headline accent, blue cards */
+[data-theme="midnight-rose"]{
+    --bg: #14142b;
+    --text: #f4f1f7;
+    --text-muted: #cfc9d8;
+    --heading: #ffffff;
+    --accent: #ff8fb1;
+    --card-bg: #2f3a8f;
+    --card-hover: #ff8fb1;
+    --card-text: #ffffff;
+    --card-hover-text: #1b1233;
+    --btn-border: #ff8fb1;
+    --btn-hover-bg: #ff8fb1;
+    --btn-text: #ffffff;
+    --nav-panel-bg: #2f3a8f;
+    --on-image: #ffffff;
+    --doc-bg: #f6dfe8;
+    --doc-accent: #2f3a8f;
+}
+
+/* electric blue base with hot pink accents */
+[data-theme="bubblegum-blue"]{
+    --bg: #0d1b3e;
+    --text: #ffffff;
+    --text-muted: #cbd6f2;
+    --heading: #ffffff;
+    --accent: #ff5fa2;
+    --card-bg: #1f4fa8;
+    --card-hover: #ff5fa2;
+    --card-text: #ffffff;
+    --card-hover-text: #ffffff;
+    --btn-border: #ff5fa2;
+    --btn-hover-bg: #ff5fa2;
+    --btn-text: #ffffff;
+    --nav-panel-bg: #1f4fa8;
+    --on-image: #ffffff;
+    --doc-bg: #cfe0ff;
+    --doc-accent: #1f4fa8;
+}
+
+/* soft light theme: blush background, navy text, berry accents */
+[data-theme="cotton-candy"]{
+    --bg: #fdf4f8;
+    --text: #1f2547;
+    --text-muted: #4a5273;
+    --heading: #1f2547;
+    --accent: #d9508b;
+    --card-bg: #3f6fd1;
+    --card-hover: #d9508b;
+    --card-text: #ffffff;
+    --card-hover-text: #ffffff;
+    --btn-border: #3f6fd1;
+    --btn-hover-bg: #3f6fd1;
+    --btn-text: #1f2547;
+    --nav-panel-bg: #3f6fd1;
+    --on-image: #ffffff;
+    --doc-bg: #fdf4f8;
+    --doc-accent: #3f6fd1;
+}
+
+/* plum/orchid base with periwinkle cards */
+[data-theme="orchid-steel"]{
+    --bg: #1b1233;
+    --text: #f3eefb;
+    --text-muted: #cdc3e0;
+    --heading: #ffffff;
+    --accent: #f0a6ca;
+    --card-bg: #4c5fd7;
+    --card-hover: #f0a6ca;
+    --card-text: #ffffff;
+    --card-hover-text: #26173f;
+    --btn-border: #f0a6ca;
+    --btn-hover-bg: #4c5fd7;
+    --btn-text: #ffffff;
+    --nav-panel-bg: #4c5fd7;
+    --on-image: #ffffff;
+    --doc-bg: #e5e0f7;
+    --doc-accent: #4c5fd7;
+}
+
+/* pale ice blue base, deep navy text, rose accents */
+[data-theme="ice-and-rose"]{
+    --bg: #eef4fb;
+    --text: #16233f;
+    --text-muted: #3f4a68;
+    --heading: #16233f;
+    --accent: #e26d94;
+    --card-bg: #16233f;
+    --card-hover: #e26d94;
+    --card-text: #ffffff;
+    --card-hover-text: #ffffff;
+    --btn-border: #16233f;
+    --btn-hover-bg: #16233f;
+    --btn-text: #16233f;
+    --nav-panel-bg: #16233f;
+    --on-image: #ffffff;
+    --doc-bg: #dfeaf7;
+    --doc-accent: #16233f;
+}
+
+/* ---------- theme picker widget ---------- */
+/* 
+.theme-picker{
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: rgba(10, 12, 30, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(6px);
+    max-width: 220px;
+}
+
+.theme-picker *{
+    background-color: transparent;
+}
+
+.theme-picker p{
+    color: #ffffff;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.theme-picker button{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    color: #ffffff;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 8px;
+    padding: 7px 10px;
+    transition: border-color 0.3s, background 0.3s;
+}
+
+.theme-picker button:hover{
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.theme-picker button[aria-pressed="true"]{
+    border-color: #ffffff;
+    background: rgba(255, 255, 255, 0.18);
+}
+
+.theme-picker .swatch{
+    display: inline-flex;
+    flex: none;
+    width: 34px;
+    height: 14px;
+    border-radius: 7px;
+    overflow: hidden;
+}
+
+.theme-picker .swatch span{
+    flex: 1;
+}
+
+@media only screen and (max-width: 600px){
+    .theme-picker{
+        right: 10px;
+        bottom: 10px;
+        padding: 10px 12px;
+        gap: 6px;
+    }
+
+    .theme-picker button{
+        font-size: 12px;
+        padding: 5px 8px;
+    }
+} */
