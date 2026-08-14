@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>FPGA Pac-Man - Beth's Personal Portfolio Website</title>
+
+    <link rel="stylesheet" href="css/pacman.css">
+    <link rel="stylesheet" href="css/themes.css">
+    <script src="js/themes.js"></script>
+
+    <!-- Prism.js -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
+    >
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css"
+    >
+
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+
+    <meta charset="utf-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+    <meta
+        name="description"
+        content="A hardware implementation of Pac-Man built with Verilog, assembly, an FPGA, and VGA graphics."
+    >
+    <script
+        src="https://kit.fontawesome.com/4306451910.js"
+        crossorigin="anonymous"
+    ></script>
+</head>
+
+<body>
+    <main class="content">
+        <h1 class="title">FPGA Pac-Man</h1>
+
+        <p class="byline">
+            A hardware implementation of Pac-Man built with Verilog,
+            assembly, an FPGA, and VGA graphics
+        </p>
+
+        <p class="team">
+            Created with Sofia Tsvihun for Duke ECE 350
+        </p>
+
+        <p class="repo-link">
+            <a
+                href="https://github.com/bethlindenbaum/pacman"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <i class="fa-brands fa-github" aria-hidden="true"></i>
+                View the source code on GitHub
+            </a>
+        </p>
+
+        <h2 class="subtitle">Overview</h2>
+
+        <p>
+            FPGA Pac-Man is a playable version of the classic arcade game that
+            my teammate and I designed for Duke's Digital Systems course.
+            Instead of running the game in a conventional software framework,
+            we implemented it on an FPGA using a custom processor, behavioral
+            Verilog, assembly code, register-mapped I/O, and a VGA display.
+        </p>
+
+        <br>
+
+        <p>
+            The finished game contains a complete maze, collectible dots,
+            four animated ghosts, joystick-controlled movement, collision
+            detection, three player lives, a score and high-score system,
+            multiple rounds, and win and loss animations. Pac-Man can move
+            through the maze and its side tunnels while the ghosts follow
+            predefined paths. Eating every dot wins the round, while colliding
+            with a ghost removes one life.
+        </p>
+
+        <img
+            class="screenshot hero-image"
+            src="images/pacman-lead-graphic.jpg"
+            alt="Pac-Man and four ghosts displayed in the FPGA game's maze"
+        >
+
+        <p class="caption">
+            The game rendered on a VGA display, including the maze, dots,
+            Pac-Man, and four animated ghosts.
+        </p>
+
+        <h2 class="subtitle">Gameplay</h2>
+
+        <div class="card-list">
+            <article class="card">
+                <h3>Joystick Control</h3>
+                <p>
+                    A physical joystick connected to the FPGA controls
+                    Pac-Man's direction. The most recent requested direction
+                    is remembered until Pac-Man reaches a location where that
+                    turn is possible.
+                </p>
+            </article>
+
+            <article class="card">
+                <h3>Maze Boundaries</h3>
+                <p>
+                    Movement logic checks the directions available at each
+                    position so Pac-Man follows the paths without moving
+                    through walls. Side passages wrap Pac-Man to the opposite
+                    edge of the maze.
+                </p>
+            </article>
+
+            <article class="card">
+                <h3>Collectible Dots</h3>
+                <p>
+                    Each dot has an individual visibility bit. When Pac-Man's
+                    coordinates match a dot's location, assembly code clears
+                    that bit and adds ten points to the score.
+                </p>
+            </article>
+
+            <article class="card">
+                <h3>Four Ghosts</h3>
+                <p>
+                    Four independently colored ghosts move around the maze on
+                    predefined routes. Each ghost uses a movement counter to
+                    determine its current segment and next direction.
+                </p>
+            </article>
+
+            <article class="card">
+                <h3>Lives and Collisions</h3>
+                <p>
+                    Pac-Man begins with three lives. A collision with a ghost
+                    pauses play, triggers a flashing animation, removes one
+                    life, and resets the character positions.
+                </p>
+            </article>
+
+            <article class="card">
+                <h3>Scoring and Rounds</h3>
+                <p>
+                    Clearing the maze starts another round while preserving
+                    the player's score. Losing all three lives resets the
+                    game and updates the high score when appropriate.
+                </p>
+            </article>
+        </div>
+
+        <h2 class="subtitle">System Architecture</h2>
+
+        <p>
+            The project combines a custom processor with dedicated graphics
+            hardware. The processor runs assembly code that manages persistent
+            game state, while the VGA controller handles movement, collision
+            detection, animation, and pixel generation. A modified register
+            file forms the communication boundary between the two systems.
+        </p>
+
+        <div class="architecture" aria-label="Pac-Man hardware architecture">
+            <div class="architecture-box">
+                <strong>Joystick</strong>
+                <span>Up, down, left, and right</span>
+            </div>
+
+            <div class="architecture-arrow" aria-hidden="true">&rarr;</div>
+
+            <div class="architecture-box">
+                <strong>VGA Controller</strong>
+                <span>Movement, sprites, collisions, and animation</span>
+            </div>
+
+            <div class="architecture-arrow" aria-hidden="true">&harr;</div>
+
+            <div class="architecture-box">
+                <strong>Register-Mapped I/O</strong>
+                <span>Coordinates, lives, win state, and dots</span>
+            </div>
+
+            <div class="architecture-arrow" aria-hidden="true">&harr;</div>
+
+            <div class="architecture-box">
+                <strong>Custom Processor</strong>
+                <span>Assembly game loop and dot state</span>
+            </div>
+
+            <div class="architecture-arrow" aria-hidden="true">&rarr;</div>
+
+            <div class="architecture-box">
+                <strong>VGA Display</strong>
+                <span>Real-time game output</span>
+            </div>
+        </div>
+
+        <h2 class="subtitle">Register-Mapped I/O</h2>
+
+        <p>
+            We connected the processor and graphics logic by extending the
+            processor's register file with dedicated hardware inputs and
+            outputs. This allowed the assembly program and VGA controller to
+            share state without adding new instructions to the processor.
+        </p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Shared State</th>
+                    <th>Direction</th>
+                    <th>Purpose</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>Pac-Man X and Y</td>
+                    <td>Graphics to processor</td>
+                    <td>
+                        Lets the assembly program determine whether Pac-Man is
+                        currently positioned over a dot.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Number of lives</td>
+                    <td>Graphics to processor</td>
+                    <td>
+                        Tells the assembly program when a complete game reset
+                        is required.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Game-win signal</td>
+                    <td>Graphics to processor</td>
+                    <td>
+                        Causes the dot registers to be reinitialized after the
+                        player clears the maze.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Dot visibility registers</td>
+                    <td>Processor to graphics</td>
+                    <td>
+                        Controls which dots the VGA controller draws in each
+                        row of the maze.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 class="subtitle">Assembly Game State</h2>
+
+        <p>
+            Twenty-one processor registers store the maze's dot state, with
+            each bit representing one dot. At startup, the assembly program
+            fills those registers with ones. During the game loop, it compares
+            Pac-Man's hardware-provided coordinates with the stored dot
+            locations and clears the matching bit using a bit mask.
+        </p>
+
+        <div id="box">
+            <pre class="line-numbers"><code class="language-mips"># Registers $3 through $23 hold dot visibility by row.
+
+initialize:
+    addi $3, $0, -1
+    addi $4, $0, -1
+    addi $5, $0, -1
+    # Additional rows are initialized in the same way.
+
+game_loop:
+row1:
+    lw   $24, 40($0)       # Load row 1's y-coordinate.
+    bne  $24, $2, row2     # Continue if Pac-Man is elsewhere.
+
+col1:
+    lw   $24, 9($0)        # Load the dot's x-coordinate.
+    bne  $24, $1, col2
+
+    addi $29, $0, -3       # Mask with one cleared bit.
+    and  $3, $3, $29       # Mark the dot as eaten.
+    j    score</code></pre>
+        </div>
+
+        <h2 class="subtitle">Graphics and Animation</h2>
+
+        <p>
+            The VGA controller generates the maze and sprites in real time.
+            Sprite artwork is stored in memory files, and the active pixel
+            location selects the corresponding sprite data and output color.
+            Counters update character movement at a playable speed without
+            changing the VGA timing rate.
+        </p>
+
+        <div class="card-list">
+            <article class="card">
+                <h3>Pac-Man Animation</h3>
+                <p>
+                    Pac-Man alternates between a closed-mouth sprite and an
+                    open-mouth sprite oriented up, down, left, or right based
+                    on the current direction of travel.
+                </p>
+            </article>
+
+            <article class="card">
+                <h3>Ghost Animation</h3>
+                <p>
+                    The ghosts alternate between two sprite frames, producing
+                    the characteristic squiggling motion at the bottom of each
+                    character.
+                </p>
+            </article>
+
+            <article class="card">
+                <h3>Life-Loss Animation</h3>
+                <p>
+                    After a collision, Pac-Man flashes three times while the
+                    ghosts temporarily disappear and movement pauses before
+                    the round resumes.
+                </p>
+            </article>
+
+            <article class="card">
+                <h3>Win Animation</h3>
+                <p>
+                    After all dots have been eaten, the maze walls flash in a
+                    different color three times before the next round begins.
+                </p>
+            </article>
+        </div>
+
+        <h2 class="subtitle">Timing Challenges</h2>
+
+        <p>
+            One of the most difficult parts of the project was synchronizing
+            the processor and graphics hardware. Initially, the processor and
+            VGA controller generated separate 25 MHz clocks from the FPGA's
+            100 MHz system clock. Small differences between those clock
+            domains caused sprites to become pixelated and occasionally caused
+            the processor to miss reset signals.
+        </p>
+
+        <br>
+
+        <p>
+            We corrected the problem by generating a consistent 25 MHz clock
+            with a phase-locked loop and supplying the same clock to both
+            systems. This substantially improved the graphics and made the
+            round-reset, game-reset, and game-win communication reliable.
+        </p>
+
+        <h2 class="subtitle">High-Score Timing</h2>
+
+        <p>
+            Updating the high score introduced another hardware timing issue.
+            On a game loss, the design needed to compare the final game score
+            with the high score during the same transition that reset the game
+            score to zero. Depending on signal timing, the high-score logic
+            could see the reset value instead of the completed score.
+        </p>
+
+        <br>
+
+        <p>
+            We resolved this by adding a delayed score register that preserved
+            the previous game's value for one additional clock cycle. The
+            high-score logic reads this stable delayed value while the current
+            game score is reset.
+        </p>
+
+        <h2 class="subtitle">Testing</h2>
+
+        <p>
+            We tested the project directly on the FPGA by playing through every
+            major game state: eating individual dots, clearing the entire maze,
+            colliding with each ghost, losing one or more lives, losing a full
+            game, beginning another round, and replacing the high score.
+            On-board LEDs exposed internal values during debugging, and other
+            people play-tested the game to uncover interaction bugs we might
+            not encounter ourselves.
+        </p>
+
+        <h2 class="subtitle">Built With</h2>
+
+        <ul>
+            <li>
+                <b>Verilog</b> — VGA graphics, movement, collision detection,
+                animation, score calculation, resets, and processor hardware.
+            </li>
+
+            <li>
+                <b>Assembly</b> — dot-state initialization, coordinate
+                comparisons, bit-mask updates, and game-state handling.
+            </li>
+
+            <li>
+                <b>Custom 32-bit processor</b> — executed the assembly game
+                loop and communicated with the graphics hardware through its
+                register file.
+            </li>
+
+            <li>
+                <b>FPGA development board</b> — hosted the processor, graphics
+                pipeline, memories, clocking logic, and physical input/output.
+            </li>
+
+            <li>
+                <b>VGA</b> — displayed the maze, sprites, dots, lives, score,
+                high score, and animations.
+            </li>
+
+            <li>
+                <b>Physical joystick</b> — supplied active-low directional
+                inputs through a pull-up resistor network.
+            </li>
+
+            <li>
+                <b>Python</b> — converted image and color data into memory
+                files used by the graphics hardware.
+            </li>
+        </ul>
+
+        <h2 class="subtitle">Possible Next Steps</h2>
+
+        <p>
+            Future additions could include dynamic ghost behavior, ghosts that
+            chase Pac-Man, power pellets, edible ghost states, sound effects,
+            bonus items, and Duke or ECE-themed Easter eggs such as a Duke “D”
+            or a NAND gate.
+        </p>
+
+        <a class="back-link" href="index.html#projects">
+            &larr; Back to home page
+        </a>
+    </main>
+
+    <!-- Prism.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-mips.min.js"></script>
+</body>
+
+</html>
