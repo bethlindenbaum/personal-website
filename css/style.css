@@ -12,8 +12,6 @@ html{
 body {
     background: var(--bg);
     color: var(--text);
-    /* margin: 10;
-    padding: 10; */
     text-align: left;
     float: none;
 }
@@ -24,7 +22,7 @@ body {
     background-color: var(--bg);
     background-image: url(../images/background-picture-transparent.png);
     
-    /* Starts at 95% of screen height, then shrinks more quickly */
+    /* Starts at 95% of screen height, then shrinks */
     background-size:
         auto clamp(
             50vh,
@@ -32,7 +30,7 @@ body {
             95vh
         );
 
-    /* Keep crop scaling the same */
+    /* crop scaling */
     background-position:
         calc(
             100% + clamp(
@@ -45,17 +43,6 @@ body {
 
     background-repeat: no-repeat;
     background-attachment: fixed;
-
-    /* background-size: auto 95%; */
-    /* background-position: right bottom; */
-    /* background-position:
-        calc(100% + max(0px, calc((1100px - 100vw) * 0.5)))
-        bottom;
-    background-repeat: no-repeat; */
-    /* background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    background-repeat: no-repeat; */
 }
 
 .container{
@@ -101,10 +88,6 @@ nav ul li a:hover::after{
     margin-top: clamp(120px, 20vh, 250px);
 
     color: var(--on-image);
-    /* margin-top: 20%;
-    font-size: 30px;
-    color: var(--on-image); */
-    /* line-height: 1; */
 }
 
 .header-text h1{
@@ -114,9 +97,6 @@ nav ul li a:hover::after{
     font-size: clamp(30px, 5vw, 60px);
 
     margin-top: 20px;
-    /* font-weight: bold;
-    font-size: 60px;
-    margin-top: 20px; */
 }
 
 .header-text h1 span{
@@ -245,12 +225,6 @@ nav ul li a:hover::after{
     place-items: center;
 }
 
-/* .links-list a{
-    width: 50%; 
-    margin-left: auto;
-    margin-right: auto;
-} */
-
 .links-list a i{
     font-size: 70px;
     color: var(--text);
@@ -287,25 +261,6 @@ nav .fa-solid{
 }
 
 @media only screen and (max-width: 600px){
-    /* #header{
-        width: 100%;
-        height: 100vh;
-        background-color: var(--bg);
-        background-image: url(../images/background-picture-transparent.png);
-        background-size: auto 70%;
-        background-position: right bottom;
-        background-repeat: no-repeat;
-    }
-
-    .header-text{
-        margin-top: 75%;
-        font-size: 16px;
-    }
-
-    .header-text h1{
-        font-size: 28px;
-    } */
-
     nav .fa-solid{
         display: block;
         font-size: 25px;
@@ -319,7 +274,6 @@ nav .fa-solid{
         position: absolute;
         right: 30px;
         top: 20px
-        /* justify-content: flex-end; */
     }
 
     nav ul{
@@ -368,76 +322,3 @@ nav .fa-solid{
       background-attachment: scroll;
     }
 }
-
-@media only screen and (max-height: 600px){
-    #header{
-        background-attachment: scroll;
-    }
-    /* #header{
-        background-size: auto 100%;
-        background-repeat: no-repeat;
-        background-attachment: scroll;        /* prevent Safari bugs */
-        /* background-position: right center;
-        min-height: 100vh;
-    }
-
-    .header-text{
-        margin-top: 10%;
-    }
-
-    .header-text h1{
-        font-size: 46px;
-    } */ 
-}
-
-/* h1 {
-    font-family: "Gill Sans", sans-serif;
-    font-size: 32px;
-    text-transform: uppercase;
-    line-height: 1;
-    font-weight: bold;
-    color: Ivory;
-    background-color: linen;
-} */
-
-/* h2 {
-    font-family: oswald;
-    font-size: 24px;
-    font-weight: 500;
-    text-transform: uppercase;
-    line-height: 1;
-    font-weight: bold;
-    color: Ivory;
-    background-color: linen;
-} */
-/* 
-hr{
-    color: Ivory;
-} */
-
-/* p {
-    font-family: Inter;
-    letter-spacing: 0.3px;
-    font-size: 16px;
-    line-height: 20px;
-    color: Ivory;
-} */
-
-/* div {
-    font-family: Inter;
-    letter-spacing: 0.3px;
-    font-size: 16px;
-    line-height: 18px;
-    padding: 3px 3px 3px 3px;
-    border-radius: 3px;
-    color: DarkOliveGreen;
-    background-color: Ivory;
-} */
-
-/* button{
-    color: DarkOliveGreen;
-}
-
-footer{
-    color: Ivory;
-} */
