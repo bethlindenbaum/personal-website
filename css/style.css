@@ -190,7 +190,7 @@ nav ul li a:hover::after{
 
 .btn:hover{
     background: var(--btn-hover-bg);
-    color: #ffffff;
+    color: var(--btn-hover-text);
 }
 
 /* ------------links------------ */
