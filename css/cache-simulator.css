@@ -1,0 +1,113 @@
+/*
+ * Reuse the MIPS project page's shared layout so the two pages remain
+ * visually consistent. Cache-specific components are defined below.
+ */
+@import url("mips-cpu.css");
+
+.cache-overview {
+    width: 560px;
+    max-width: calc(100% - 40px);
+    background: white;
+    padding: 18px;
+    object-fit: contain;
+}
+
+.address-diagram {
+    display: grid;
+    grid-template-columns: 2fr 1.25fr 1.5fr;
+    margin: 20px;
+    overflow: hidden;
+    color: white;
+    border: 2px solid var(--doc-accent);
+    border-radius: 10px;
+}
+
+.address-field {
+    display: flex;
+    min-height: 110px;
+    padding: 16px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    background: var(--doc-accent);
+    border-right: 1px solid rgba(255, 255, 255, 0.65);
+}
+
+.address-field:last-child {
+    border-right: 0;
+}
+
+.address-field span {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.address-field small {
+    margin-top: 7px;
+    font-size: 13px;
+    line-height: 1.35;
+}
+
+.set-field {
+    filter: brightness(1.12);
+}
+
+.offset-field {
+    filter: brightness(0.9);
+}
+
+.formula-box {
+    margin: 20px;
+    padding: 16px 20px;
+    background: white;
+    border-left: 5px solid var(--doc-accent);
+    border-radius: 8px;
+}
+
+.formula-box p {
+    padding: 4px 0;
+}
+
+.trace-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    padding: 10px 20px 20px;
+}
+
+.trace-grid h3 {
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.trace-grid pre {
+    width: 100%;
+    height: 100%;
+    margin: 0 !important;
+}
+
+.trace-grid code {
+    margin: 0;
+    padding: 0;
+}
+
+@media only screen and (max-width: 700px) {
+    .address-diagram {
+        grid-template-columns: 1fr;
+    }
+
+    .address-field {
+        min-height: 90px;
+        border-right: 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.65);
+    }
+
+    .address-field:last-child {
+        border-bottom: 0;
+    }
+
+    .trace-grid {
+        grid-template-columns: 1fr;
+    }
+}
