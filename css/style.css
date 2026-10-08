@@ -20,7 +20,7 @@ body {
     width: 100%;
     height: 100vh;
     background-color: var(--bg);
-    background-image: url(../images/background-picture-transparent.png);
+    background-image: url(../images/chapel_headshot_transparent_background.png);
     
     /* Starts at 95% of screen height, then shrinks */
     background-size:
